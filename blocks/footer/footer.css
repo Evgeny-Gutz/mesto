@@ -2,10 +2,19 @@
     color: #545454;
     margin: 0 auto;
     max-width: 880px;
+    margin-top: 67px;
+    margin-bottom: 60px;
 }
 
 @media screen and (max-width: 920px) {
     .footer {
         max-width: 88%;
+    }
+}
+
+@media screen and (max-width: 615px) {
+    .footer {
+        margin-top: 48px;
+        margin-bottom: 36px;
     }
 }
