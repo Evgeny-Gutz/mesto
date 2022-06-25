@@ -5,8 +5,23 @@
     color: #ffffff;
     min-height: 50px;
     cursor: pointer;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.22;
+    text-align: center;
 }
 
 .popup-block__input_type_submite:hover {
     opacity: 0.8;
+}
+
+@media screen and (max-width: 660px) {
+    .popup-block__input_type_submite {
+        margin-top: 45px;
+        min-height: 46px;
+        font-size: 14px;
+        line-height: 1.21;
+        text-align: center;
+    }
 }

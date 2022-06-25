@@ -3,3 +3,10 @@
     display: flex;
     justify-content: space-between;
 }
+
+@media screen and (max-width: 615px) {
+    .profile {
+        max-height: 286px;
+        flex-direction: column;
+    }
+}

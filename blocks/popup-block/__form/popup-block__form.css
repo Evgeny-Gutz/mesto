@@ -7,3 +7,12 @@
     z-index: 5;
     border-radius: 10px;
 }
+
+@media screen and (max-width: 660px) {
+    .popup-block__form {
+        padding: 25px 22px 25px;
+        max-width: 282px;
+        max-height: 322px;
+        box-sizing: border-box;
+    }
+}

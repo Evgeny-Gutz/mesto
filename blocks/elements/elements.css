@@ -4,3 +4,16 @@
     grid-column-gap: 17px;
     grid-row-gap: 20px;
 }
+
+@media screen and (max-width: 925px) {
+    .elements {
+        grid-template-columns: repeat(2, 1fr);
+        justify-items: center;
+    }
+}
+
+@media screen and (max-width: 660px) {
+    .elements {
+        grid-template-columns: repeat(1, 1fr);      
+    }
+}
