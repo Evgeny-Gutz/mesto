@@ -1,0 +1,12 @@
+.popup-block__input_type_submite {
+    margin-top: 48px;
+    background-color: #000;
+    border-radius: 2px;
+    color: #ffffff;
+    min-height: 50px;
+    cursor: pointer;
+}
+
+.popup-block__input_type_submite:hover {
+    opacity: 0.8;
+}

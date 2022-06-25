@@ -3,4 +3,9 @@
     min-height: 19px;
     background-image: url(../../../images/like.svg);
     background-size: cover;
+    cursor: pointer;
+}
+
+.element__like:hover {
+    opacity: 0.5;
 }

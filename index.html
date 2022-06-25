@@ -8,15 +8,18 @@
     <title>Место</title>
 </head>
 <body class="root">
-    <div class="popup-block">
+    <section class="popup-block">
         <div class="popup-block__opacity"></div>
         <form class="popup-block__form">
-            <h3>Редактировать профиль</h3>
-            <input type="text">
-            <input type="text">
-            <input type="submit">
+            <button class="popup-block__cross">
+                <img src="images/cross.png" alt="Крест">
+            </button>
+            <h3 class="popup__title">Редактировать профиль</h3>
+            <input class="popup-block__input popup-block__input_type_text" type="text">
+            <input class="popup-block__input popup-block__input_type_text" type="text">
+            <input class="popup-block__input popup-block__input_type_submite" type="submit" value="Сохранить">
         </form>
-    </div>
+    </section>
     <header class="header root__section_margins_45-0-40-0">
         <div class="header__logo"></div>
     </header>
@@ -50,7 +53,7 @@
                 <img class="element__img" src="images/Гора Эльбрус.jpg" alt="Гора Эльбрус">
                 <div class="element__group">
                     <p class="element__text">Гора Эльбрус</p>
-                    <div class="element__like"></div>
+                    <div class="element__like element__like_active"></div>
                 </div>
             </div>
             <div class="element">

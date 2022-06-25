@@ -8,4 +8,9 @@
     position: relative;
     top: 15px;
     left: 18px;
+    cursor: pointer;
+}
+
+.profile__edit-button:hover {
+    opacity: 0.6;
 }
