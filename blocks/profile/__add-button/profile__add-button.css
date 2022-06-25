@@ -1,6 +1,10 @@
 .profile__add-button {
     margin: 0;
     padding: 0;
-    border: none;
+    border: 2px solid #FFFFFF;
+    border-radius: 2px;
+    width: 150px;
+    height: 50px;
+    align-self: center;
     background-color: transparent;
 }

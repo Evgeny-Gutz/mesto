@@ -1,6 +1,10 @@
 @import url(../vendor/normalize.css);
 @import url(../blocks/root/root.css);
 
+@import url(../blocks/popup-block/popup-block.css);
+@import url(../blocks/popup-block/__opacity/popup-block__opacity.css);
+@import url(../blocks/popup-block/__form/popup-block__form.css);
+
 @import url(../blocks/header/header.css);
 
 @import url(../blocks/header/__logo/header__logo.css);
@@ -30,3 +34,4 @@
 @import url(../blocks/root/__section/_margins/root__section_margins_0-0-50-0.css);
 @import url(../blocks/root/__section/_margins/root__section_margins_45-0-40-0.css);
 @import url(../blocks/root/__section/_margins/root__section_margins_67-0-60-0.css);
+@import url(../blocks/display/__flex/display__flex.css);

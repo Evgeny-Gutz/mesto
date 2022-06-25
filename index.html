@@ -8,18 +8,31 @@
     <title>Место</title>
 </head>
 <body class="root">
+    <div class="popup-block">
+        <div class="popup-block__opacity"></div>
+        <form class="popup-block__form">
+            <h3>Редактировать профиль</h3>
+            <input type="text">
+            <input type="text">
+            <input type="submit">
+        </form>
+    </div>
     <header class="header root__section_margins_45-0-40-0">
         <div class="header__logo"></div>
     </header>
     <main class="main">
         <section class="profile root__section_margins_0-0-50-0">
-            <img class="profile__avatar" src="images/image.jpg" alt="Жак-Ив Кусто">
-            <div class="profile__info">
-                <h1 class="profile__name">Жак-Ив Кусто</h1>
-                <button class="profile__edit-button">
-                    <img src="images/pen.svg" alt="Ручка">
-                </button>
-                <p class="profile__profession">Исследователь океана</p>
+            <div class="display__flex">
+                <img class="profile__avatar" src="images/image.jpg" alt="Жак-Ив Кусто">
+                <div class="profile__info">
+                    <div>
+                        <h1 class="profile__name">Жак-Ив Кусто</h1>
+                        <p class="profile__profession">Исследователь океана</p>
+                    </div>
+                    <button class="profile__edit-button">
+                        <img src="images/pen.svg" alt="Ручка">
+                    </button>
+                </div>
             </div>
             <button class="profile__add-button">
                 <img src="images/plus.svg" alt="Плюс">

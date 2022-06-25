@@ -1,0 +1,7 @@
+.popup-block__form {
+    display: flex;
+    flex-direction: column; 
+    background-color: #FFFFFF;
+    position: absolute;
+    z-index: 5;
+}
