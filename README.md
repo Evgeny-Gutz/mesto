@@ -15,6 +15,6 @@
 
 * [Ссылка на сайт в GitHub Pages](https://evgeny-gutz.github.io/mesto/)
 
-**Картинки**
+**Картинки**\
 
 * [оптимизироваk картинки](https://tinypng.com/)
