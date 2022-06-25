@@ -1,7 +1,7 @@
 .popup-block__form {
     padding: 34px 36px 37px;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     background-color: #FFFFFF;
     position: absolute;
     z-index: 5;
