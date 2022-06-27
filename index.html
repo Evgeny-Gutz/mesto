@@ -8,16 +8,17 @@
     <title>Место</title>
 </head>
 <body class="root">
-    <section class="popup-block">
-        <div class="popup-block__opacity"></div>
-        <form class="popup-block__form">
-            <button class="popup-block__cross"></button>
-            <h3 class="popup-block__title">Редактировать профиль</h3>
-            <input class="popup-block__input popup-block__input_type_text" type="text">
-            <input class="popup-block__input popup-block__input_type_text" type="text">
-            <input class="popup-block__input popup-block__input_type_submite" type="submit" value="Сохранить">
-        </form>
-    </section>
+    <div class="popup">
+        <div class="popup__container">
+            <button class="popup__cross" type="button"></button>
+            <h3 class="popup__title">Редактировать профиль</h3>
+            <form class="popup__form" name="profile-data">
+                <input class="popup__input" type="text" name="name">
+                <input class="popup__input" type="text" name="profession">
+                <input class="popup__submite" type="submite" name="submite" value="Сохранить" >
+            </form>
+        </div>
+    </div>
     <header class="header">
         <div class="header__logo"></div>
     </header>

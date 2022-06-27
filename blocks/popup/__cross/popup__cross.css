@@ -1,4 +1,4 @@
-.popup-block__cross {
+.popup__cross {
     margin: 0;
     padding: 0;
     border: 0;
@@ -13,12 +13,12 @@
     cursor: pointer;
 }
 
-.popup-block__cross:hover {
+.popup__cross:hover {
     opacity: 0.6;
 }
 
 @media screen and (max-width: 660px) {
-    .popup-block__cross {
+    .popup__cross {
         width: 20px;
         height: 20px;
         top: -36px;

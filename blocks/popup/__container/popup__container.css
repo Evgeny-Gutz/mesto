@@ -1,18 +1,17 @@
-.popup-block__form {
+.popup__container {
+    position: relative;
     padding: 34px 36px 37px;
     display: flex;
     flex-direction: column;
     background-color: #FFFFFF;
-    position: absolute;
-    z-index: 5;
     border-radius: 10px;
 }
 
 @media screen and (max-width: 660px) {
-    .popup-block__form {
-        padding: 25px 22px 25px;
-        max-width: 282px;
-        max-height: 322px;
+    .popup__container {
+        padding: 25px 22px;
+        min-width: 282px;
+        min-height: 322px;
         box-sizing: border-box;
     }
 }

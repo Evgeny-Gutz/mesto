@@ -1,8 +1,7 @@
-let popupElem = document.querySelector('.popup-block');
-let popupOpacity = popupElem.querySelector('.popup-block__opacity');
-let formElement = popupElem.querySelector('.popup-block__form');
-let formCross = formElement.querySelector('.popup-block__cross');
-let textInputs = formElement.querySelectorAll('.popup-block__input_type_text');
+let popupElem = document.querySelector('.popup');
+let formElement = popupElem.querySelector('.popup__form');
+let formCross = formElement.querySelector('.popup__cross');
+let textInputs = formElement.querySelectorAll('.popup__input');
 
 let profileName = document.querySelector('.profile__name');
 let profileProfession = document.querySelector('.profile__profession');
@@ -13,8 +12,8 @@ let inputProfession = textInputs[1];
 inputName.value = profileName.textContent;
 inputProfession.value = profileProfession.textContent;
   
-formCross.addEventListener('click', closePopup);
-popupOpacity.addEventListener('click', closePopup);
+// formCross.addEventListener('click', closePopup);
+popupElem.addEventListener('click', closePopup);
 
 profileEditButton.addEventListener('click', openPopup);
 formElement.addEventListener('submit', formSubmitHandler);
