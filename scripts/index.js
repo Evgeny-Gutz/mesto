@@ -8,7 +8,9 @@ let profileEditButton = document.querySelector('.profile__edit-button');
 
 let inputName = formElement.querySelector(".popup__input[name='name']");
 let inputProfession = formElement.querySelector(".popup__input[name='profession']");
-  
+
+// Перед работой торопился, скрипт переделать не успел, проверте код без скрипта.... Спасибо.
+
 formCross.addEventListener('click', closePopup());
 popupElem.addEventListener('click', closePopup());
 console.log(inputName);
