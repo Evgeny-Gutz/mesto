@@ -1,19 +1,25 @@
 let popupElem = document.querySelector('.popup');
 let formElement = popupElem.querySelector('.popup__form');
-let formCross = formElement.querySelector('.popup__cross');
-let textInputs = formElement.querySelectorAll('.popup__input');
+let formCross = document.querySelector('.popup__cross');
 
 let profileName = document.querySelector('.profile__name');
 let profileProfession = document.querySelector('.profile__profession');
 let profileEditButton = document.querySelector('.profile__edit-button');
 
-let inputName = textInputs[0];
-let inputProfession = textInputs[1];
-inputName.value = profileName.textContent;
-inputProfession.value = profileProfession.textContent;
+let inputName = formElement.querySelector(".popup__input[name='name']");
+let inputProfession = formElement.querySelector(".popup__input[name='profession']");
   
-// formCross.addEventListener('click', closePopup);
-popupElem.addEventListener('click', closePopup);
+formCross.addEventListener('click', closePopup());
+popupElem.addEventListener('click', closePopup());
+console.log(inputName);
+
+popupElem.addEventListener('keydown', function(event) {
+      if (event.code == 'Enter') {
+        inputName.value = profileName.textContent;
+        inputProfession.value = profileProfession.textContent;
+        popupElem.style.display = 'none';
+      }
+    });
 
 profileEditButton.addEventListener('click', openPopup);
 formElement.addEventListener('submit', formSubmitHandler);
@@ -26,6 +32,8 @@ function closePopup () {
 
 function openPopup () {
     popupElem.style.display = 'flex';
+    inputName.value = profileName.textContent;
+    inputProfession.value = profileProfession.textContent;
 }
 
 function formSubmitHandler (evt) {
