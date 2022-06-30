@@ -4,7 +4,8 @@
     border: 0;
     outline: none;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-    min-height: 27px;
+    min-height: 29px;
+    box-sizing: border-box;
     display: flex;
     color: #000000;
     font-style: normal;

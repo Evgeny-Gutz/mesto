@@ -1,6 +1,7 @@
 .element {
+    display: flex;
     max-width: 282px;
-    max-height: 361px;
+    min-height: 361px;
     background-color: #FFFFFF;
     border-radius: 10px;
 }

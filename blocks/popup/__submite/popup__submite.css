@@ -12,7 +12,8 @@
     font-weight: 400;
     font-size: 18px;
     line-height: 1.22;
-    text-align: center;
+    justify-content: center;
+    align-content: center;
     cursor: pointer;
 }
 
@@ -26,6 +27,5 @@
         min-height: 46px;
         font-size: 14px;
         line-height: 1.21;
-        text-align: center;
     }
 }

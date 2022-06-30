@@ -1,6 +1,9 @@
 .popup__container {
     position: relative;
     padding: 34px 36px 37px;
+    box-sizing: border-box;
+    min-height: 330px;
+    min-width: 430px;
     display: flex;
     flex-direction: column;
     background-color: #FFFFFF;
