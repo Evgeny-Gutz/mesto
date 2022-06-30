@@ -18,7 +18,7 @@ formSubmit.addEventListener('click', visibilityChange)
 popupForm.addEventListener('submit', formSubmitHandler);
 
 popupElem.addEventListener('click', function (evt) {
-    if (evt.target.classList.contains('popup__opened')) {
+    if (evt.target.classList.contains('popup_opened')) {
         visibilityChange();
     }
 })
@@ -36,5 +36,5 @@ function formSubmitHandler (evt) {
 }
 
 function visibilityChange () {
-    popupElem.classList.toggle('popup__opened');
+    popupElem.classList.toggle('popup_opened');
 }
