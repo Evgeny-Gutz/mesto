@@ -13,8 +13,8 @@
 
 **GitHub Pages**
 
-* [Ссылка на сайт в GitHub Pages](https://evgeny-gutz.github.io/mesto/).
+* [Ссылка на сайт в GitHub Pages](https://evgeny-gutz.github.io/mesto/)
 
 **Картинки**\
 
-* [оптимизироваk картинки](https://tinypng.com/).
+* [оптимизироваk картинки](https://tinypng.com/)
