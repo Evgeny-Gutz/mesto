@@ -13,15 +13,13 @@ editButton.addEventListener('click', openPopup);
 
 formCross.addEventListener('click', visibilityChange);
 
-formSubmit.addEventListener('click', visibilityChange)
-
 popupForm.addEventListener('submit', formSubmitHandler);
 
-popupElem.addEventListener('click', function (evt) {
-    if (evt.target.classList.contains('popup_opened')) {
-        visibilityChange();
-    }
-})
+// popupElem.addEventListener('click', function (evt) {
+//     if (evt.target.classList.contains('popup_opened')) {
+//         visibilityChange();
+//     }
+// })
 
 function openPopup () {
     inputName.value = profileName.textContent;
@@ -33,6 +31,7 @@ function formSubmitHandler (evt) {
     evt.preventDefault();
     profileName.textContent = inputName.value;
     profileProfession.textContent = inputProfession.value;
+    visibilityChange ();
 }
 
 function visibilityChange () {
