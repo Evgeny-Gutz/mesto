@@ -25,15 +25,16 @@ const selectors = {
     }
 }
 
-// 0. Немного изменил доступ к селекторам
 
-const popupProfile = document.querySelector(selectors.block_popup.formProfile).parentElement.parentElement,
+const rootNode = document.querySelector('.root');
+
+const popupProfile = document.querySelector(selectors.block_popup.formProfile).closest('.popup'),
       crossProfile = popupProfile.querySelector(selectors.block_popup.cross),
       formProfile = popupProfile.querySelector(selectors.block_popup.formProfile),
       inputName = formProfile.querySelector(selectors.block_popup.inputName),
       inputJob = formProfile.querySelector(selectors.block_popup.inputJob);
 
-const popupNewCard = document.querySelector(selectors.block_popup.formNewCard).parentElement.parentElement,
+const popupNewCard = document.querySelector(selectors.block_popup.formNewCard).closest('.popup'),
       crossNewCard = popupNewCard.querySelector(selectors.block_popup.cross),
       formNewCard = popupNewCard.querySelector(selectors.block_popup.formNewCard),
       inputTitle = popupNewCard.querySelector(selectors.block_popup.inputTitle),
@@ -45,122 +46,89 @@ const profile = document.querySelector(selectors.block_profile.profile),
       editButton = profile.querySelector(selectors.block_profile.editButton),
       addButton = profile.querySelector(selectors.block_profile.addButton);
 
-const elements = document.querySelector(selectors.block_elements.elements);
+const cardsContainer = document.querySelector(selectors.block_elements.elements);
 
-editButton.addEventListener('click', openPopup);
-crossProfile.addEventListener('click', () => popupProfile.classList.remove('popup_opened'));
-formProfile.addEventListener('submit', formProfileSubmitHandler);
-
-// Задание 1. Шесть карточек «из коробки»:
-
-const initialCards = [
-{
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-},
-{
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-},
-{
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-},
-{
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-},
-{
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-},
-{
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-}
-]; 
-
-initialCards.forEach((item) => {
-    const elementTemplate = createTemplateCard(item);
-    elements.append(elementTemplate);
-})
+const elementTemplate = document.querySelector(selectors.block_templates.element).content.querySelector('.element'),
+      figureTemplate = document.querySelector(selectors.block_templates.figure).content.querySelector('.figure');
 
 
-// Задание 2. Форма добавления карточки.Сделайте так, чтобы форма открывалась нажатием на кнопку «+» и закрывалась кликом на крестик:
-
-addButton.addEventListener('click', () => popupNewCard.classList.add('popup_opened'));
-crossNewCard.addEventListener('click', () => popupNewCard.classList.remove('popup_opened'));
-
-
-// Задание 3. Добавление карточки:
-
-formNewCard.addEventListener('submit', formNewCardSubmitHandler);
-
-function formNewCardSubmitHandler (evt) {
+function handlerSubmitNewCard(evt) {
     evt.preventDefault();
-    const obj = {};
-    obj.name = inputTitle.value;
-    obj.link = inputLink.value;
-    const elementTemplate = createTemplateCard(obj);
+    const cardData = {};
+    cardData.name = inputTitle.value;
+    cardData.link = inputLink.value;
+    const elementTemplate = createTemplateCard(cardData);
 
-    elements.prepend(elementTemplate);
-    popupNewCard.classList.remove('popup_opened');
+    cardsContainer.prepend(elementTemplate);
+    closePopup(evt);
 }
 
+function createTemplateCard(item) {
+    const cardTemplate = elementTemplate.cloneNode('.element');
+    const img = cardTemplate.querySelector('.element__img');
+    const cardName = cardTemplate.querySelector('.element__text');
+    const like = cardTemplate.querySelector('.element__like');
+    const buttonDeleteCard = cardTemplate.querySelector('.element__delete-icon');
 
-// Задание 4. Лайк карточки:
-// Задание 5. Удаление карточки:
-
-function createTemplateCard (item) {
-    const elementTemplate = document.querySelector(selectors.block_templates.element).content.querySelector('.element').cloneNode(true);
-    const img = elementTemplate.querySelector('.element__img');
-    const h4 = elementTemplate.querySelector('.element__text');
-    const like = elementTemplate.querySelector('.element__like');
-    const deleteCard = elementTemplate.querySelector('.element__delete-icon');
-
-    h4.textContent = item.name;
+    cardName.textContent = item.name;
     img.src = item.link;
     img.alt = item.name;
     img.addEventListener('click', createNewFullFigure);
     like.addEventListener('click', () => like.classList.toggle('element__like_active')); // <=  Добавление лайка.
-    deleteCard.addEventListener('click', () => deleteCard.closest('.element').remove()); // <=  Удаление карточки.
+    buttonDeleteCard.addEventListener('click', () => cardTemplate.remove()); // <=  Удаление карточки.
 
-    return elementTemplate;
+    return cardTemplate;
 }
 
-
-// Задание 6. Открытие попапа с картинкой:
-
-function createNewFullFigure (evt) {
-    const rootNode = document.querySelector('.root');
-    const figureTemplate = document.querySelector(selectors.block_templates.figure).content.querySelector('.figure').cloneNode(true);
-    const cross = figureTemplate.querySelector('.figure__cross');
-    const img = figureTemplate.querySelector('.figure__img');
-    const figcaption = figureTemplate.querySelector('.figure__img-name');
+function createNewFullFigure(evt) {
+    const fullfigureTemplate = figureTemplate.cloneNode(true);
+    const cross = fullfigureTemplate.querySelector('.figure__cross');
+    const img = fullfigureTemplate.querySelector('.figure__img');
+    const figcaption = fullfigureTemplate.querySelector('.figure__img-name');
 
     img.src = evt.target.src;
     img.alt = evt.target.alt;
     figcaption.textContent = evt.target.nextElementSibling.querySelector('.element__text').textContent;
     cross.addEventListener('click', () => cross.closest('.figure').remove()); 
 
-    rootNode.prepend(figureTemplate);
+    rootNode.prepend(fullfigureTemplate);
 }
 
-
-// Задание 7. Плавное открытие и закрытие попапов:
-// В popup.css добавил свойство - transition: visibility .3s linear, opacity .3s linear;
-
-
-
-function openPopup () {
+function openProfileForm() {
     inputName.value = profileName.textContent;
     inputJob.value = profileProfession.textContent;
-    popupProfile.classList.add('popup_opened');
 }
 
-function formProfileSubmitHandler (evt) {
+function handlerSubmitFormProfile(evt) {
     evt.preventDefault();
     profileName.textContent = inputName.value;
     profileProfession.textContent = inputJob.value;
-    popupProfile.classList.remove('popup_opened');
+    closePopup(evt);
 }
+
+function openPopup(evt) {
+    if (evt.target === editButton) {
+        popupProfile.classList.add('popup_opened');
+        return;
+    }
+    popupNewCard.classList.add('popup_opened');
+}
+
+function closePopup(evt) {
+    evt.target.closest('.popup').classList.remove('popup_opened');
+}
+
+initialCards.forEach((item) => {
+    const elementTemplate = createTemplateCard(item);
+    cardsContainer.append(elementTemplate);
+})
+
+editButton.addEventListener('click', openProfileForm);
+editButton.addEventListener('click', openPopup);
+crossProfile.addEventListener('click', closePopup);
+formProfile.addEventListener('submit', handlerSubmitFormProfile);
+
+addButton.addEventListener('click', openPopup);
+crossNewCard.addEventListener('click', closePopup);
+
+formNewCard.addEventListener('submit', handlerSubmitNewCard);
