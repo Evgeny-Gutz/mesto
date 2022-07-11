@@ -7,7 +7,8 @@ const selectors = {
         inputLink: '.popup__input_type_link',
         formProfile: '.popup__form[name="profile-data"]',
         formNewCard: '.popup__form[name="new-card"]',
-        cross: '.popup__cross'
+        cross: '.popup__cross',
+        figure: '.popup__figure',
     },
     block_profile: {
         profile: '.profile',
@@ -40,6 +41,9 @@ const popupNewCard = document.querySelector(selectors.block_popup.formNewCard).c
       inputTitle = popupNewCard.querySelector(selectors.block_popup.inputTitle),
       inputLink = popupNewCard.querySelector(selectors.block_popup.inputLink);
 
+const popupFullPicture = document.querySelector(selectors.block_popup.figure).closest('.popup'),
+      crossFullPicture = popupFullPicture.querySelector(selectors.block_popup.cross);
+
 const profile = document.querySelector(selectors.block_profile.profile),
       profileName = profile.querySelector(selectors.block_profile.name),
       profileProfession = profile.querySelector(selectors.block_profile.profession),
@@ -48,8 +52,7 @@ const profile = document.querySelector(selectors.block_profile.profile),
 
 const cardsContainer = document.querySelector(selectors.block_elements.elements);
 
-const elementTemplate = document.querySelector(selectors.block_templates.element).content.querySelector('.element'),
-      figureTemplate = document.querySelector(selectors.block_templates.figure).content.querySelector('.figure');
+const elementTemplate = document.querySelector(selectors.block_templates.element).content.querySelector('.element');
 
 
 function handlerSubmitNewCard(evt) {
@@ -73,25 +76,20 @@ function createTemplateCard(item) {
     cardName.textContent = item.name;
     img.src = item.link;
     img.alt = item.name;
-    img.addEventListener('click', createNewFullFigure);
+    img.addEventListener('click', createNewDataForPopupPicture);
+    img.addEventListener('click', openPopup);
     like.addEventListener('click', () => like.classList.toggle('element__like_active')); // <=  Добавление лайка.
     buttonDeleteCard.addEventListener('click', () => cardTemplate.remove()); // <=  Удаление карточки.
 
     return cardTemplate;
 }
 
-function createNewFullFigure(evt) {
-    const fullfigureTemplate = figureTemplate.cloneNode(true);
-    const cross = fullfigureTemplate.querySelector('.figure__cross');
-    const img = fullfigureTemplate.querySelector('.figure__img');
-    const figcaption = fullfigureTemplate.querySelector('.figure__img-name');
+function createNewDataForPopupPicture(evt) {
+    const pictureLink = popupFullPicture.querySelector('.popup__img');
+    const pictureName = popupFullPicture.querySelector('.popup__img-name');
 
-    img.src = evt.target.src;
-    img.alt = evt.target.alt;
-    figcaption.textContent = evt.target.nextElementSibling.querySelector('.element__text').textContent;
-    cross.addEventListener('click', () => cross.closest('.figure').remove()); 
-
-    rootNode.prepend(fullfigureTemplate);
+    pictureLink.src = evt.target.src;
+    pictureName.textContent = evt.target.alt;
 }
 
 function openProfileForm() {
@@ -109,6 +107,10 @@ function handlerSubmitFormProfile(evt) {
 function openPopup(evt) {
     if (evt.target === editButton) {
         popupProfile.classList.add('popup_opened');
+        return;
+    }
+    else if (evt.target.classList.contains('element__img')) {
+        popupFullPicture.classList.add('popup_opened');
         return;
     }
     popupNewCard.classList.add('popup_opened');
@@ -130,5 +132,7 @@ formProfile.addEventListener('submit', handlerSubmitFormProfile);
 
 addButton.addEventListener('click', openPopup);
 crossNewCard.addEventListener('click', closePopup);
+
+crossFullPicture.addEventListener('click', closePopup);
 
 formNewCard.addEventListener('submit', handlerSubmitNewCard);
