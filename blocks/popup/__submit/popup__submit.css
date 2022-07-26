@@ -5,6 +5,7 @@
     outline: none;
     background-color: #000;
     min-height: 50px;
+    position: relative;
     display: flex;
     color: #ffffff;
     border-radius: 2px;
