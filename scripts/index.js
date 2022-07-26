@@ -129,58 +129,6 @@ function closePopup() {
     document.querySelector('.popup_opened').classList.remove('popup_opened');
 }
 
-function setValidForm(formElement) {
-    const formInputs = Array.from(formElement.querySelectorAll('.popup__input'));
-    const buttonElement = formElement.querySelector('.popup__submit');
-    tuggleButtonState(formInputs, buttonElement);    
-
-    formInputs.forEach((input) => {
-        input.addEventListener('input', () => {
-            isValid(input, formElement);
-            tuggleButtonState(formInputs, buttonElement);
-        });
-    })
-}
-
-function tuggleButtonState(inputList, buttonElement) {
-    if(!hasInvalidInput(inputList)) {
-        buttonElement.classList.remove('popup__submit_inactive');
-    }
-    else {
-        buttonElement.classList.add('popup__submit_inactive');
-    }
-}
-
-function hasInvalidInput(inputList) {
-    return inputList.some( inputElem => {
-        return !inputElem.validity.valid;
-    })
-}
-
-function showInputError(element, formElement, textMessage) {
-    const textError = formElement.querySelector(`.${element.id}-error`);
-    element.classList.add('popup__input_type_error');
-    textError.classList.add('popup__input-error_active');
-    textError.textContent = textMessage;
-    
-}
-
-function hideInputError(element, formElement) {
-    const textError = formElement.querySelector(`.${element.id}-error`);
-    element.classList.remove('popup__input_type_error');
-    textError.classList.remove('popup__input-error_active');
-    textError.textContent = "";
-}
-
-function isValid(formInput, formElement) {
-    if(!formInput.validity.valid) {
-        showInputError(formInput, formElement, formInput.validationMessage);
-    }
-    else {
-        hideInputError(formInput, formElement);
-    }
-}
-
 function isPopupOpen(popupList) {
     return popupList.some( (elem) => {
         return elem.classList.contains('popup_opened');
@@ -214,5 +162,3 @@ crossFullPicture.addEventListener('click', closePopup);
 
 formProfile.addEventListener('submit', handleProfileFormSubmit);
 formNewCard.addEventListener('submit', handleAddCardSubmit);
-setValidForm(formProfile);
-setValidForm(formNewCard);
