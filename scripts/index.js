@@ -196,6 +196,15 @@ document.addEventListener('keydown', (evt) => {
     if(evt.key === 'Escape' && isPopupOpen(popupList)) closePopup();
 })
 
+popupList.forEach( elem => {
+    Array.from(elem.children).forEach( (item) => {
+        item.addEventListener('click', (evt) => {
+            evt.stopPropagation();
+        })
+    })
+    elem.addEventListener('click', closePopup);
+})
+
 editButton.addEventListener('click', initProfileForm);
 addButton.addEventListener('click', initFormAddCard);
 
