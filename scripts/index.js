@@ -55,6 +55,8 @@ const cardsContainer = document.querySelector(selectors.block_elements.elements)
 
 const elementTemplate = document.querySelector(selectors.block_templates.element).content.querySelector('.element');
 
+const popupList = Array.from(document.querySelectorAll('.popup'));
+
 function handleAddCardSubmit(evt) {
     evt.preventDefault();
     const buttonElem = evt.target.querySelector('.popup__submit');
@@ -126,7 +128,6 @@ function openPopup(popupName) {
 function closePopup() {
     document.querySelector('.popup_opened').classList.remove('popup_opened');
 }
-// -----------------------------------------------------------
 
 function setValidForm(formElement) {
     const formInputs = Array.from(formElement.querySelectorAll('.popup__input'));
@@ -140,7 +141,6 @@ function setValidForm(formElement) {
         });
     })
 }
-
 
 function tuggleButtonState(inputList, buttonElement) {
     if(!hasInvalidInput(inputList)) {
@@ -181,18 +181,19 @@ function isValid(formInput, formElement) {
     }
 }
 
+function isPopupOpen(popupList) {
+    return popupList.some( (elem) => {
+        return elem.classList.contains('popup_opened');
+    })
+}
 
-
-
-
-
-
-
-
-// --------------------------------------------------------
 initialCards.forEach((item) => {
     const elementTemplate = createTemplateCard(item);
     cardsContainer.append(elementTemplate);
+})
+
+document.addEventListener('keydown', (evt) => {
+    if(evt.key === 'Escape' && isPopupOpen(popupList)) closePopup();
 })
 
 editButton.addEventListener('click', initProfileForm);
