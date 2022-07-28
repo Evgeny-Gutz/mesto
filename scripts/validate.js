@@ -8,14 +8,12 @@ const namesForValidation = {
   }
 
 function enableValidation(config) {
-    const formNewCard = document.querySelector(`${config.formSelector}[name="new-card"]`);
-    const formProfile = document.querySelector(`${config.formSelector}[name="profile-data"]`);
 
-    function setValidForm(formElement) {
+    function setEventListeners(formElement) {
         const formInputs = Array.from(formElement.querySelectorAll(config.inputSelector));
         const buttonElement = formElement.querySelector(config.submitButtonSelector);
-        tuggleButtonState(formInputs, buttonElement);    
-    
+        tuggleButtonState(formInputs, buttonElement);
+
         formInputs.forEach((input) => {
             input.addEventListener('input', () => {
                 isValid(input, formElement);
@@ -27,9 +25,11 @@ function enableValidation(config) {
     function tuggleButtonState(inputList, buttonElement) {
         if(!hasInvalidInput(inputList)) {
             buttonElement.classList.remove(config.inactiveButtonClass);
+            buttonElement.removeAttribute('disabled');
         }
         else {
             buttonElement.classList.add(config.inactiveButtonClass);
+            buttonElement.setAttribute('disabled', true);
         }
     }
     
@@ -62,8 +62,19 @@ function enableValidation(config) {
         }
     }
 
-    setValidForm(formProfile);
-    setValidForm(formNewCard);
+    function enableValidation() {
+        const formList = Array.from(document.querySelectorAll(config.formSelector));
+        formList.forEach( (formElement) => {
+            formElement.addEventListener('submit', (evt) => {
+                evt.preventDefault();
+                evt.submitter.classList.add('popup__submit_inactive');
+                evt.submitter.setAttribute('disabled', true);   
+            })
+            setEventListeners(formElement);
+        })
+    }
+    
+    enableValidation();
 };
 
 enableValidation(namesForValidation);

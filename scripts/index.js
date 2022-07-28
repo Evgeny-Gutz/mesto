@@ -1,74 +1,67 @@
 const selectors = {
-    block_popup: {
-        popup: '.popup',
+    blockPopup: {
+        popupProfile: '.profile-popup',
+        popupNewCard: '.card-popup',
         inputName: '.popup__input_type_name',
         inputJob: '.popup__input_type_job',
         inputTitle: '.popup__input_type_title',
         inputLink: '.popup__input_type_link',
         formProfile: '.popup__form[name="profile-data"]',
         formNewCard: '.popup__form[name="new-card"]',
-        cross: '.popup__cross',
         figure: '.popup__figure',
         img: '.popup__img',
         imgName: '.popup__img-name'
     },
-    block_profile: {
+    blockProfile: {
         profile: '.profile',
         name: '.profile__name',
         profession: '.profile__profession',
         editButton: '.profile__edit-button',
         addButton: '.profile__add-button'
     },
-    block_elements: {
+    blockElements: {
         elements: '.elements'
     },
-    block_templates: {
+    blockTemplate: {
         element: '.element-template',
         figure: '.figure-template'
     }
 }
 
-const popupProfile = document.querySelector(selectors.block_popup.formProfile).closest('.popup'),
-      crossProfile = popupProfile.querySelector(selectors.block_popup.cross),
-      formProfile = popupProfile.querySelector(selectors.block_popup.formProfile),
-      inputName = formProfile.querySelector(selectors.block_popup.inputName),
-      inputJob = formProfile.querySelector(selectors.block_popup.inputJob);
+const popupProfile = document.querySelector(selectors.blockPopup.popupProfile),
+      formProfile = popupProfile.querySelector(selectors.blockPopup.formProfile),
+      inputName = formProfile.querySelector(selectors.blockPopup.inputName),
+      inputJob = formProfile.querySelector(selectors.blockPopup.inputJob);
 
-const popupNewCard = document.querySelector(selectors.block_popup.formNewCard).closest('.popup'),
-      crossNewCard = popupNewCard.querySelector(selectors.block_popup.cross),
-      formNewCard = popupNewCard.querySelector(selectors.block_popup.formNewCard),
-      inputTitle = popupNewCard.querySelector(selectors.block_popup.inputTitle),
-      inputLink = popupNewCard.querySelector(selectors.block_popup.inputLink);
+const popupNewCard = document.querySelector(selectors.blockPopup.popupNewCard),
+      formNewCard = popupNewCard.querySelector(selectors.blockPopup.formNewCard),
+      inputTitle = popupNewCard.querySelector(selectors.blockPopup.inputTitle),
+      inputLink = popupNewCard.querySelector(selectors.blockPopup.inputLink);
 
-const popupFullPicture = document.querySelector(selectors.block_popup.figure).closest('.popup'),
-      crossFullPicture = popupFullPicture.querySelector(selectors.block_popup.cross),
-      pictureLink = popupFullPicture.querySelector(selectors.block_popup.img),
-      pictureName = popupFullPicture.querySelector(selectors.block_popup.imgName);
+const popupFullPicture = document.querySelector(selectors.blockPopup.figure).closest('.popup'),
+      pictureLink = popupFullPicture.querySelector(selectors.blockPopup.img),
+      pictureName = popupFullPicture.querySelector(selectors.blockPopup.imgName);
 
-const profile = document.querySelector(selectors.block_profile.profile),
-      profileName = profile.querySelector(selectors.block_profile.name),
-      profileProfession = profile.querySelector(selectors.block_profile.profession),
-      editButton = profile.querySelector(selectors.block_profile.editButton),
-      addButton = profile.querySelector(selectors.block_profile.addButton);
+const profile = document.querySelector(selectors.blockProfile.profile),
+      profileName = profile.querySelector(selectors.blockProfile.name),
+      profileProfession = profile.querySelector(selectors.blockProfile.profession),
+      editButton = profile.querySelector(selectors.blockProfile.editButton),
+      addButton = profile.querySelector(selectors.blockProfile.addButton);
 
-const cardsContainer = document.querySelector(selectors.block_elements.elements);
+const cardsContainer = document.querySelector(selectors.blockElements.elements);
 
-const elementTemplate = document.querySelector(selectors.block_templates.element).content.querySelector('.element');
+const elementTemplate = document.querySelector(selectors.blockTemplate.element).content.querySelector('.element');
 
 const popupList = Array.from(document.querySelectorAll('.popup'));
 
 function handleAddCardSubmit(evt) {
     evt.preventDefault();
-    const buttonElem = evt.target.querySelector('.popup__submit');
-
-    if (buttonElem.classList.contains('popup__submit_inactive')) {
-        return false;
-    };
 
     const cardData = {};
     cardData.name = inputTitle.value;
     cardData.link = inputLink.value;
     const elementTemplate = createTemplateCard(cardData);
+    evt.target.reset();
 
     cardsContainer.prepend(elementTemplate);
     closePopup();
@@ -106,11 +99,6 @@ function initProfileForm() {
 
 function handleProfileFormSubmit(evt) {
     evt.preventDefault();
-    const buttonElem = evt.target.querySelector('.popup__submit');
-
-    if (buttonElem.classList.contains('popup__submit_inactive')) {
-        return false;
-    };
 
     profileName.textContent = inputName.value;
     profileProfession.textContent = inputJob.value;
@@ -123,10 +111,21 @@ function initFormAddCard() {
 
 function openPopup(popupName) {
     popupName.classList.add('popup_opened');
+    document.addEventListener('keydown', closeByEscape);
 }
 
 function closePopup() {
-    document.querySelector('.popup_opened').classList.remove('popup_opened');
+    const openedPopup = document.querySelector('.popup_opened')
+    if (openedPopup) {
+        openedPopup.classList.remove('popup_opened');
+        document.removeEventListener('keydown', closeByEscape);
+    }
+}
+
+function closeByEscape(evt) {
+    if(evt.key === 'Escape') {
+        closePopup();
+    }
 }
 
 function isPopupOpen(popupList) {
@@ -140,25 +139,19 @@ initialCards.forEach((item) => {
     cardsContainer.append(elementTemplate);
 })
 
-document.addEventListener('keydown', (evt) => {
-    if(evt.key === 'Escape' && isPopupOpen(popupList)) closePopup();
-})
-
-popupList.forEach( elem => {
-    Array.from(elem.children).forEach( (item) => {
-        item.addEventListener('click', (evt) => {
-            evt.stopPropagation();
-        })
-    })
-    elem.addEventListener('click', closePopup);
+popupList.forEach( popup => {
+    popup.addEventListener('mousedown', (evt) => {
+        if (evt.target.classList.contains('popup_opened')) {
+            closePopup(popup);
+        }
+        if (evt.target.classList.contains('popup__close')) {
+            closePopup(popup)
+        }
+    });
 })
 
 editButton.addEventListener('click', initProfileForm);
 addButton.addEventListener('click', initFormAddCard);
-
-crossProfile.addEventListener('click', closePopup);
-crossNewCard.addEventListener('click', closePopup);
-crossFullPicture.addEventListener('click', closePopup);
 
 formProfile.addEventListener('submit', handleProfileFormSubmit);
 formNewCard.addEventListener('submit', handleAddCardSubmit);
