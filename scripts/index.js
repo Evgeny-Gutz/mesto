@@ -128,12 +128,6 @@ function closeByEscape(evt) {
     }
 }
 
-function isPopupOpen(popupList) {
-    return popupList.some( (elem) => {
-        return elem.classList.contains('popup_opened');
-    })
-}
-
 initialCards.forEach((item) => {
     const elementTemplate = createTemplateCard(item);
     cardsContainer.append(elementTemplate);

@@ -8,21 +8,22 @@ const namesForValidation = {
   }
 
 function enableValidation(config) {
-
+    const formList = Array.from(document.querySelectorAll(config.formSelector));
+    
     function setEventListeners(formElement) {
         const formInputs = Array.from(formElement.querySelectorAll(config.inputSelector));
         const buttonElement = formElement.querySelector(config.submitButtonSelector);
-        tuggleButtonState(formInputs, buttonElement);
+        toggleButtonState(formInputs, buttonElement);
 
         formInputs.forEach((input) => {
             input.addEventListener('input', () => {
                 isValid(input, formElement);
-                tuggleButtonState(formInputs, buttonElement);
+                toggleButtonState(formInputs, buttonElement);
             });
         })
     }
     
-    function tuggleButtonState(inputList, buttonElement) {
+    function toggleButtonState(inputList, buttonElement) {
         if(!hasInvalidInput(inputList)) {
             buttonElement.classList.remove(config.inactiveButtonClass);
             buttonElement.removeAttribute('disabled');
@@ -62,19 +63,15 @@ function enableValidation(config) {
         }
     }
 
-    function enableValidation() {
-        const formList = Array.from(document.querySelectorAll(config.formSelector));
-        formList.forEach( (formElement) => {
-            formElement.addEventListener('submit', (evt) => {
-                evt.preventDefault();
-                evt.submitter.classList.add('popup__submit_inactive');
-                evt.submitter.setAttribute('disabled', true);   
-            })
-            setEventListeners(formElement);
+    formList.forEach( (formElement) => {
+        formElement.addEventListener('submit', (evt) => {
+            evt.preventDefault();
+            evt.submitter.classList.add(config.inactiveButtonClass);
+            evt.submitter.setAttribute('disabled', true);   
         })
-    }
-    
-    enableValidation();
+        setEventListeners(formElement);
+    })
+
 };
 
 enableValidation(namesForValidation);
