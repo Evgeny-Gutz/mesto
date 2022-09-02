@@ -1,5 +1,5 @@
 import Card from './Card.js';
-// import FormValidator from './FormValidator.js';
+import FormValidator from './FormValidator.js';
 import initialCards from './cards.js';
 
 const selectors = {
@@ -12,9 +12,6 @@ const selectors = {
         inputLink: '.popup__input_type_link',
         formProfile: '.popup__form[name="profile-data"]',
         formNewCard: '.popup__form[name="new-card"]',
-        figure: '.popup__figure',
-        img: '.popup__img',
-        imgName: '.popup__img-name'
     },
     blockProfile: {
         profile: '.profile',
@@ -30,6 +27,17 @@ const selectors = {
         element: '.element-template'
     }
 }
+
+const namesForValidation = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__submit',
+    inactiveButtonClass: 'popup__submit_inactive',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__input-error_active'
+}
+
+const formList = Array.from(document.querySelectorAll(namesForValidation.formSelector));
 
 const popupProfile = document.querySelector(selectors.blockPopup.popupProfile),
       formProfile = popupProfile.querySelector(selectors.blockPopup.formProfile),
@@ -116,6 +124,16 @@ popupList.forEach( popup => {
             closePopup(popup)
         }
     });
+})
+
+formList.forEach( (formElement) => {
+    formElement.addEventListener('submit', (evt) => {
+        evt.preventDefault();
+        evt.submitter.classList.add(namesForValidation.inactiveButtonClass);
+        evt.submitter.setAttribute('disabled', true);   
+    })
+    const blokForm = new FormValidator(namesForValidation, formElement);
+    blokForm.setValadathion();
 })
 
 editButton.addEventListener('click', initProfileForm);
