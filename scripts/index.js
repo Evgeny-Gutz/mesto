@@ -1,3 +1,7 @@
+import Card from './Card.js';
+// import FormValidator from './FormValidator.js';
+import initialCards from './cards.js';
+
 const selectors = {
     blockPopup: {
         popupProfile: '.profile-popup',
@@ -23,8 +27,7 @@ const selectors = {
         elements: '.elements'
     },
     blockTemplate: {
-        element: '.element-template',
-        figure: '.figure-template'
+        element: '.element-template'
     }
 }
 
@@ -38,10 +41,6 @@ const popupNewCard = document.querySelector(selectors.blockPopup.popupNewCard),
       inputTitle = popupNewCard.querySelector(selectors.blockPopup.inputTitle),
       inputLink = popupNewCard.querySelector(selectors.blockPopup.inputLink);
 
-const popupFullPicture = document.querySelector(selectors.blockPopup.figure).closest('.popup'),
-      pictureLink = popupFullPicture.querySelector(selectors.blockPopup.img),
-      pictureName = popupFullPicture.querySelector(selectors.blockPopup.imgName);
-
 const profile = document.querySelector(selectors.blockProfile.profile),
       profileName = profile.querySelector(selectors.blockProfile.name),
       profileProfession = profile.querySelector(selectors.blockProfile.profession),
@@ -49,8 +48,6 @@ const profile = document.querySelector(selectors.blockProfile.profile),
       addButton = profile.querySelector(selectors.blockProfile.addButton);
 
 const cardsContainer = document.querySelector(selectors.blockElements.elements);
-
-const elementTemplate = document.querySelector(selectors.blockTemplate.element).content.querySelector('.element');
 
 const popupList = Array.from(document.querySelectorAll('.popup'));
 
@@ -60,35 +57,12 @@ function handleAddCardSubmit(evt) {
     const cardData = {};
     cardData.name = inputTitle.value;
     cardData.link = inputLink.value;
-    const elementTemplate = createTemplateCard(cardData);
+    const elementTemplate = new Card(cardData, '.element-template');
+    
     evt.target.reset();
 
-    cardsContainer.prepend(elementTemplate);
+    cardsContainer.prepend(elementTemplate.generateCard());
     closePopup();
-}
-
-function createTemplateCard(item) {
-    const cardTemplate = elementTemplate.cloneNode(true);
-    const img = cardTemplate.querySelector('.element__img');
-    const cardName = cardTemplate.querySelector('.element__text');
-    const like = cardTemplate.querySelector('.element__like');
-    const buttonDeleteCard = cardTemplate.querySelector('.element__delete-icon');
-
-    cardName.textContent = item.name;
-    img.src = item.link;
-    img.alt = item.name;
-    img.addEventListener('click', initPicturePopup);
-    like.addEventListener('click', () => like.classList.toggle('element__like_active')); // <=  Добавление лайка.
-    buttonDeleteCard.addEventListener('click', () => cardTemplate.remove()); // <=  Удаление карточки.
-
-    return cardTemplate;
-}
-
-function initPicturePopup(evt) {
-    pictureLink.src = evt.target.src;
-    pictureLink.alt = evt.target.alt;
-    pictureName.textContent = evt.target.alt;
-    openPopup(popupFullPicture);
 }
 
 function initProfileForm() {
@@ -129,8 +103,8 @@ function closeByEscape(evt) {
 }
 
 initialCards.forEach((item) => {
-    const elementTemplate = createTemplateCard(item);
-    cardsContainer.append(elementTemplate);
+    const elementTemplate = new Card(item, '.element-template');
+    cardsContainer.append(elementTemplate.generateCard());
 })
 
 popupList.forEach( popup => {
