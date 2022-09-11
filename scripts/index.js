@@ -65,12 +65,17 @@ function handleAddCardSubmit(evt) {
     const cardData = {};
     cardData.name = inputTitle.value;
     cardData.link = inputLink.value;
-    const elementTemplate = new Card(cardData, '.element-template');
     
     evt.target.reset();
 
-    cardsContainer.prepend(elementTemplate.generateCard());
+    cardsContainer.prepend(createCard(cardData));
     closePopup();
+}
+
+function createCard(cardData) {
+    const elementTemplate = new Card(cardData, '.element-template', handleCardClick);
+    const cardElement = elementTemplate.generateCard();
+    return cardElement;
 }
 
 function initProfileForm() {
@@ -110,9 +115,20 @@ function closeByEscape(evt) {
     }
 }
 
+function handleCardClick(name, link) {
+    const popupFullPicture = document.querySelector(this._config.popupFigure).closest(this._config.popup);
+    const pictureLink = popupFullPicture.querySelector(this._config.popupImg);
+    const pictureName = popupFullPicture.querySelector(this._config.popupImgName);
+    pictureLink.src = link;
+    pictureLink.alt = name;
+    pictureName.textContent = name;
+    openPopup(popupFullPicture);
+}
+  
+  
+
 initialCards.forEach((item) => {
-    const elementTemplate = new Card(item, '.element-template');
-    cardsContainer.append(elementTemplate.generateCard());
+    cardsContainer.append(createCard(item));
 })
 
 popupList.forEach( popup => {

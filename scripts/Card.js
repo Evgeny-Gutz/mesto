@@ -1,8 +1,9 @@
 export default class Card {
-    constructor(data, templateSelector) {
+    constructor(data, templateSelector, handleCardClick) {
         this._name = data.name;
         this._link = data.link;
         this._templateSelector = templateSelector;
+        this._handleCardClick = handleCardClick;
         this._config = {
             popup: '.popup',
             element: '.element',
@@ -22,33 +23,10 @@ export default class Card {
         return document.querySelector(this._templateSelector).content.querySelector(this._config.element);
     }
 
-    _closeByEscape(evt) {
-        if(evt.key === 'Escape') {
-            this._closePopup();
-        }
-    }
-
-    _closePopup () {
-        const openedPopup = document.querySelector('.' + this._config.popupOpened);
-        if (openedPopup) {
-            openedPopup.classList.remove(this._config.popupOpened);
-            document.removeEventListener('keydown', (evt) => this._closeByEscape(evt));
-        }
-    }
-
-    _openPopup(popupName) {
-        popupName.classList.add(this._config.popupOpened);
-        document.addEventListener('keydown', (evt) => this._closeByEscape(evt));
-    }
-
-    _initPicturePopup(evt) {
-        const popupFullPicture = document.querySelector(this._config.popupFigure).closest(this._config.popup);
-        const pictureLink = popupFullPicture.querySelector(this._config.popupImg);
-        const pictureName = popupFullPicture.querySelector(this._config.popupImgName);
-        pictureLink.src = evt.target.src;
-        pictureLink.alt = evt.target.alt;
-        pictureName.textContent = evt.target.alt;
-        this._openPopup(popupFullPicture);
+    _setEventListeners (img, like, buttonDeleteCard, cardTemplate) {
+        img.addEventListener('click', () =>  this._handleCardClick(this._name, this._link)); // <= Открытие попапа полной картинки
+        like.addEventListener('click', () => like.classList.toggle(this._config.elementLikeActive)); // <=  Добавление лайка.
+        buttonDeleteCard.addEventListener('click', () => cardTemplate.remove()); // <=  Удаление карточки.
     }
 
     generateCard() {
@@ -61,9 +39,7 @@ export default class Card {
         cardName.textContent = this._name;
         img.src = this._link;
         img.alt = this._name;
-        img.addEventListener('click', (evt) => this._initPicturePopup(evt));
-        like.addEventListener('click', () => like.classList.toggle(this._config.elementLikeActive)); // <=  Добавление лайка.
-        buttonDeleteCard.addEventListener('click', () => cardTemplate.remove()); // <=  Удаление карточки.
+        this._setEventListeners(img, like, buttonDeleteCard, cardTemplate);
     
         return cardTemplate;
     }
