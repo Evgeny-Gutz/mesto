@@ -2,21 +2,28 @@ export default class FormValidator {
     constructor (config, form) {
         this._config = config;
         this._form = form;
+        this._arrayFormInputs = Array.from(this._form.querySelectorAll(this._config.inputSelector));
+        this._formButton = this._form.querySelector(this._config.submitButtonSelector);
     }
 
     setValadathion() {
         this._setEventListeners();
     }
 
-    _setEventListeners() {
-        const formInputs = Array.from(this._form.querySelectorAll(this._config.inputSelector));
-        const buttonElement = this._form.querySelector(this._config.submitButtonSelector);
-        this._toggleButtonState(formInputs, buttonElement);
+    resetValidation() {
+        this._toggleButtonState(this._arrayFormInputs, this._formButton);
+        this._arrayFormInputs.forEach( (inputElement) => {
+            this._hideInputError(inputElement, this._form);
+        })
+    }
 
-        formInputs.forEach((input) => {
+    _setEventListeners() {
+        this._toggleButtonState(this._arrayFormInputs, this._formButton);
+
+        this._arrayFormInputs.forEach((input) => {
             input.addEventListener('input', () => {
                 this._isValid(input, this._form);
-                this._toggleButtonState(formInputs, buttonElement);
+                this._toggleButtonState(this._arrayFormInputs, this._formButton);
             });
         })
     }

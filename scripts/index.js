@@ -99,6 +99,9 @@ function initFormAddCard() {
 function openPopup(popupName) {
     popupName.classList.add('popup_opened');
     document.addEventListener('keydown', closeByEscape);
+    const blokForm = new FormValidator(namesForValidation, popupName.querySelector(namesForValidation.formSelector));
+    
+    blokForm.resetValidation();
 }
 
 function closePopup() {
@@ -106,6 +109,7 @@ function closePopup() {
     if (openedPopup) {
         openedPopup.classList.remove('popup_opened');
         document.removeEventListener('keydown', closeByEscape);
+
     }
 }
 
@@ -145,10 +149,10 @@ popupList.forEach( popup => {
 formList.forEach( (formElement) => {
     formElement.addEventListener('submit', (evt) => {
         evt.preventDefault();
-        evt.submitter.classList.add(namesForValidation.inactiveButtonClass);
         evt.submitter.setAttribute('disabled', true);   
     })
     const blokForm = new FormValidator(namesForValidation, formElement);
+    
     blokForm.setValadathion();
 })
 
