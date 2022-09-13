@@ -37,7 +37,7 @@ const namesForValidation = {
     errorClass: 'popup__input-error_active'
 }
 
-const formList = Array.from(document.querySelectorAll(namesForValidation.formSelector));
+const formValidators = {}
 
 const popupProfile = document.querySelector(selectors.blockPopup.popupProfile),
       formProfile = popupProfile.querySelector(selectors.blockPopup.formProfile),
@@ -99,9 +99,12 @@ function initFormAddCard() {
 function openPopup(popupName) {
     popupName.classList.add('popup_opened');
     document.addEventListener('keydown', closeByEscape);
-    const blokForm = new FormValidator(namesForValidation, popupName.querySelector(namesForValidation.formSelector));
+    const formName = popupName.querySelector(namesForValidation.formSelector);;
     
-    blokForm.resetValidation();
+    if (formName) {
+        formValidators[formName.getAttribute('name')].resetValidation();
+    }
+    
 }
 
 function closePopup() {
@@ -109,7 +112,6 @@ function closePopup() {
     if (openedPopup) {
         openedPopup.classList.remove('popup_opened');
         document.removeEventListener('keydown', closeByEscape);
-
     }
 }
 
@@ -146,15 +148,19 @@ popupList.forEach( popup => {
     });
 })
 
-formList.forEach( (formElement) => {
-    formElement.addEventListener('submit', (evt) => {
-        evt.preventDefault();
-        evt.submitter.setAttribute('disabled', true);   
-    })
-    const blokForm = new FormValidator(namesForValidation, formElement);
-    
-    blokForm.setValadathion();
-})
+const enableValidation = (config) => {
+  const formList = Array.from(document.querySelectorAll(config.formSelector))
+  formList.forEach((formElement) => {
+    const validator = new FormValidator(config, formElement);
+    const formName = formElement.getAttribute('name');
+
+    formValidators[formName] = validator;
+    validator.setValadathion();
+  });
+};
+
+enableValidation(namesForValidation);
+
 
 editButton.addEventListener('click', initProfileForm);
 addButton.addEventListener('click', initFormAddCard);
