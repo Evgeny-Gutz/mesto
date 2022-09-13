@@ -55,6 +55,7 @@ const profile = document.querySelector(selectors.blockProfile.profile),
       editButton = profile.querySelector(selectors.blockProfile.editButton),
       addButton = profile.querySelector(selectors.blockProfile.addButton);
 
+
 const cardsContainer = document.querySelector(selectors.blockElements.elements);
 
 const popupList = Array.from(document.querySelectorAll('.popup'));
@@ -78,10 +79,15 @@ function createCard(cardData) {
     return cardElement;
 }
 
+function getFormNameFromPopup(popup) {
+    return popup.querySelector('.popup__form').getAttribute('name');
+}
+
 function initProfileForm() {
     inputName.value = profileName.textContent;
     inputJob.value = profileProfession.textContent;
     openPopup(popupProfile);
+    formValidators[getFormNameFromPopup(popupProfile)].resetValidation();
 }
 
 function handleProfileFormSubmit(evt) {
@@ -94,17 +100,12 @@ function handleProfileFormSubmit(evt) {
 
 function initFormAddCard() {
     openPopup(popupNewCard);
+    formValidators[getFormNameFromPopup(popupNewCard)].resetValidation();
 }
 
 function openPopup(popupName) {
     popupName.classList.add('popup_opened');
     document.addEventListener('keydown', closeByEscape);
-    const formName = popupName.querySelector(namesForValidation.formSelector);;
-    
-    if (formName) {
-        formValidators[formName.getAttribute('name')].resetValidation();
-    }
-    
 }
 
 function closePopup() {
