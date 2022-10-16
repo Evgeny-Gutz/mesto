@@ -1,48 +1,64 @@
 export default class Card {
-    constructor(data, templateSelector, handleCardClick) {
-        this._name = data.name;
-        this._link = data.link;
+    constructor({name, link}, templateSelector) {
+        this._name = name;
+        this._link = link;
         this._templateSelector = templateSelector;
-        this._handleCardClick = handleCardClick;
-        this._config = {
-            popup: '.popup',
-            element: '.element',
-            elementImg: '.element__img',
-            elementText: '.element__text',
-            elementLike: '.element__like',
-            elementDeleteIcon: '.element__delete-icon',
-            popupImg: '.popup__img',
-            popupImgName: '.popup__img-name',
-            popupFigure: '.popup__figure',
-            popupOpened: 'popup_opened',
-            elementLikeActive: 'element__like_active',
-        }
-    }
-
-    _getTemplate() {
-        return document.querySelector(this._templateSelector).content.querySelector(this._config.element);
-    }
-
-    _setEventListeners (img, like, buttonDeleteCard, cardTemplate) {
-        img.addEventListener('click', () =>  this._handleCardClick(this._name, this._link)); // <= Открытие попапа полной картинки
-        like.addEventListener('click', () => like.classList.toggle(this._config.elementLikeActive)); // <=  Добавление лайка.
-        buttonDeleteCard.addEventListener('click', () => cardTemplate.remove()); // <=  Удаление карточки.
     }
 
     generateCard() {
-        const cardTemplate = this._getTemplate().cloneNode(true);
-        const img = cardTemplate.querySelector(this._config.elementImg);
-        const cardName = cardTemplate.querySelector(this._config.elementText);
-        const like = cardTemplate.querySelector(this._config.elementLike);
-        const buttonDeleteCard = cardTemplate.querySelector(this._config.elementDeleteIcon);
-    
-        cardName.textContent = this._name;
-        img.src = this._link;
-        img.alt = this._name;
-        this._setEventListeners(img, like, buttonDeleteCard, cardTemplate);
-    
-        return cardTemplate;
+        this._elementCard = this._getTemplate();
+        this._imgCard = this._elementCard.querySelector('.element__img');
+        this._textCard = this._elementCard.querySelector('.element__text');
+        this._likeCard = this._elementCard.querySelector('.element__like');
+        this._deleteIconCard = this._elementCard.querySelector('.element__delete-icon');
+        this._setEventLiteners();
+
+        this._imgCard.src = this._link;
+        this._imgCard.alt = this._name;
+        this._textCard.textContent = this._name;
+
+        return this._elementCard;
     }
 
+    _getTemplate() {
+        const cardElement = document
+        .querySelector(this._templateSelector)
+        .content
+        .querySelector('.element')
+        .cloneNode(true);
 
+        return cardElement;
+    }
+
+    _setEventLiteners() {
+        this._imgCard.addEventListener('click', () =>  this._handleImgClick());
+
+        this._likeCard.addEventListener('click', () => { this._handleLikeClick();});
+
+        this._deleteIconCard.addEventListener('click', () => { this._handleDeleteClick();});
+    }
+
+    _handleLikeClick() {
+        this._likeCard.classList.toggle('element__like_active');
+    }
+
+    _handleDeleteClick() {
+        this._elementCard.remove();
+    }
+
+    _handleImgClick() {
+        this._popup = document.querySelector('.popup_back-opacity_9');
+        this._popup.querySelector('.popup__img').src = this._link;
+        this._popup.querySelector('.popup__img').alt = this._name;
+        this._popup.querySelector('.popup__img-name').textContent = this._name;
+        this._popup.classList.add('popup_opened');
+        document.addEventListener('keydown', (evt) => {this._closeByEsc(evt);});
+    }
+
+    _closeByEsc(evt) {
+        if(evt.key === 'Escape') {
+            this._popup.classList.remove('popup_opened');
+            document.removeEventListener('keydown', this._closeByEsc);
+        }
+    }
 }
