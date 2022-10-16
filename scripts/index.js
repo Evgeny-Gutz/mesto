@@ -74,7 +74,7 @@ function handleAddCardSubmit(evt) {
 }
 
 function createCard(cardData) {
-    const elementTemplate = new Card(cardData, '.element-template', handleCardClick);
+    const elementTemplate = new Card(cardData, '.element-template');
     const cardElement = elementTemplate.generateCard();
     return cardElement;
 }
@@ -120,18 +120,7 @@ function closeByEscape(evt) {
     if(evt.key === 'Escape') {
         closePopup();
     }
-}
-
-function handleCardClick(name, link) {
-    const popupFullPicture = document.querySelector(this._config.popupFigure).closest(this._config.popup);
-    const pictureLink = popupFullPicture.querySelector(this._config.popupImg);
-    const pictureName = popupFullPicture.querySelector(this._config.popupImgName);
-    pictureLink.src = link;
-    pictureLink.alt = name;
-    pictureName.textContent = name;
-    openPopup(popupFullPicture);
-}
-  
+}  
   
 
 initialCards.forEach((item) => {
@@ -149,18 +138,18 @@ popupList.forEach( popup => {
     });
 })
 
-const enableValidation = (config) => {
+const setValidation = (config) => {
   const formList = Array.from(document.querySelectorAll(config.formSelector))
   formList.forEach((formElement) => {
     const validator = new FormValidator(config, formElement);
     const formName = formElement.getAttribute('name');
 
     formValidators[formName] = validator;
-    validator.setValadathion();
+    validator.enableValidation();
   });
 };
 
-enableValidation(namesForValidation);
+setValidation(namesForValidation);
 
 
 editButton.addEventListener('click', initProfileForm);

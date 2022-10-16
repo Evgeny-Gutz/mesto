@@ -6,7 +6,7 @@ export default class FormValidator {
         this._formButton = this._form.querySelector(this._config.submitButtonSelector);
     }
 
-    setValadathion() {
+    enableValidation() {
         this._setEventListeners();
     }
 
