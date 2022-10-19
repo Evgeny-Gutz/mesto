@@ -1,8 +1,9 @@
 export default class Card {
-    constructor({name, link}, templateSelector) {
+    constructor({name, link}, handleCardClick, templateSelector) {
         this._name = name;
         this._link = link;
         this._templateSelector = templateSelector;
+        this._handleCardClick = handleCardClick;
     }
 
     generateCard() {
@@ -31,7 +32,7 @@ export default class Card {
     }
 
     _setEventLiteners() {
-        this._imgCard.addEventListener('click', () =>  this._handleImgClick());
+        this._imgCard.addEventListener('click', () =>  this._handleCardClick());
 
         this._likeCard.addEventListener('click', () => { this._handleLikeClick();});
 
@@ -44,21 +45,5 @@ export default class Card {
 
     _handleDeleteClick() {
         this._elementCard.remove();
-    }
-
-    _handleImgClick() {
-        this._popup = document.querySelector('.popup_back-opacity_9');
-        this._popup.querySelector('.popup__img').src = this._link;
-        this._popup.querySelector('.popup__img').alt = this._name;
-        this._popup.querySelector('.popup__img-name').textContent = this._name;
-        this._popup.classList.add('popup_opened');
-        document.addEventListener('keydown', (evt) => {this._closeByEsc(evt);});
-    }
-
-    _closeByEsc(evt) {
-        if(evt.key === 'Escape') {
-            this._popup.classList.remove('popup_opened');
-            document.removeEventListener('keydown', this._closeByEsc);
-        }
     }
 }
