@@ -8,7 +8,6 @@ import UserInfo from '../scripts/components/UserInfo.js'; // ( + )
 import arrBaseCards from '../scripts/utils/cards.js'; // ( + )
 
 
-
 const selectors = {
     blockPopup: {
         popupProfile: '.profile-popup', // (+)
