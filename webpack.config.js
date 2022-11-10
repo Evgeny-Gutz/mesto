@@ -28,7 +28,12 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: [MiniCssExtractPlugin.loader, {loader: 'css-loader'}]
+                use: [MiniCssExtractPlugin.loader, {
+                    loader: 'css-loader', 
+                    options: { 
+                        importLoaders: 1 
+                    }}, 
+                    'postcss-loader'],
             },
             {
                 test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/,
@@ -44,13 +49,13 @@ module.exports = {
                     filename: 'fonts/[name].[hash][ext]'
                 }
             }
-        ]
+        ],
     },
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html'
         }),
         new CleanWebpackPlugin(),
-        new MiniCssExtractPlugin()
+        new MiniCssExtractPlugin(),
     ]
 }   
