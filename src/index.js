@@ -8,38 +8,13 @@ import PopupWithForm from '../scripts/components/PopupWithForm.js'; // ( + )
 import UserInfo from '../scripts/components/UserInfo.js'; // ( + )
 
 import arrBaseCards from '../scripts/utils/cards.js'; // ( + )
-
-
-const selectors = {
-    blockPopup: {
-        popupProfile: '.profile-popup', // (+)
-        popupNewCard: '.card-popup', // (+)
-        popupFullImg: '.popup_back-opacity_9'
-    },
-    blockProfile: {
-        profile: '.profile', // (+)
-        name: '.profile__name', // (+)
-        profession: '.profile__profession', // (+)
-        editButton: '.profile__edit-button', // (+)
-        addButton: '.profile__add-button' // (+)
-    },
-    elements: '.elements',
-    elementTemplate: '.element-template',
-    form: '.popup__form'
-}
-
-const namesForValidation = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__submit',
-    inactiveButtonClass: 'popup__submit_inactive',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__input-error_active'
-}
+import {selectors, namesForValidation} from '../scripts/utils/constants.js'; // ( + )
 
 const formValidators = {}
 
 const popupProfileElement = document.querySelector(selectors.blockPopup.popupProfile);
+const popupProfileName = document.querySelector(selectors.blockPopup.popupProfile).querySelector('.popup__input_type_name');
+const popupProfileProfession = document.querySelector(selectors.blockPopup.popupProfile).querySelector('.popup__input_type_job');
 
 const popupNewCardElement = document.querySelector(selectors.blockPopup.popupNewCard);
 
@@ -57,13 +32,7 @@ const formNewCard = new PopupWithForm(handleAddCardSubmit, selectors.blockPopup.
 
 const addingCards = new Section({
     items: arrBaseCards,
-    renderer: (objTitleLink) => {
-        const elementTemplate = new Card(objTitleLink, () => {
-            popupFullImg.open(objTitleLink);
-        }, selectors.elementTemplate);
-        const cardElement = elementTemplate.generateCard();
-        return cardElement;
-    }
+    renderer: createCard
 }, selectors.elements);
 
 const setValidation = (config) => {
@@ -85,14 +54,12 @@ const user = new UserInfo({
 function handleAddCardSubmit(evt, obj) {
     evt.preventDefault();
 
-    const elementTemplate = new Card({
+    const objTitleLinkNew = {
         name: obj['title'],
         link: obj['link']
-    }, () => {popupFullImg.open(obj);}, selectors.elementTemplate);
+    };
 
-    const cardElement = elementTemplate.generateCard();
-
-    addingCards.addItem(cardElement);
+    addingCards.addItem(createCard(objTitleLinkNew));
 
     formNewCard.close();
 }
@@ -103,6 +70,12 @@ function handleProfileFormSubmit(evt, obj) {
     user.setUserInfo(obj);
 
     formProfile.close();
+}
+
+function createCard(obj) {
+    const newCard = new Card(obj, () => {popupFullImg.open(obj)}, selectors.elementTemplate);
+    const cardElement = newCard.generateCard();
+    return cardElement;
 }
 
 function getFormName(popup) {
@@ -121,6 +94,10 @@ setValidation(namesForValidation);
 
 editButton.addEventListener('click', () => {
     formProfile.open();
+
+    popupProfileName.value = user.getUserInfo().name;
+    popupProfileProfession.value = user.getUserInfo().profession;
+
     formValidators[getFormName(popupProfileElement)].resetValidation();
 });
 
