@@ -1,15 +1,17 @@
 export  const selectors = {
     blockPopup: {
-        popupProfile: '.profile-popup', // (+)
-        popupNewCard: '.card-popup', // (+)
+        popupProfile: '.profile-popup', 
+        profName: '.popup__input_type_name', 
+        profJob: '.popup__input_type_job', 
+        popupNewCard: '.card-popup', 
         popupFullImg: '.popup_back-opacity_9'
     },
     blockProfile: {
-        profile: '.profile', // (+)
-        name: '.profile__name', // (+)
-        profession: '.profile__profession', // (+)
-        editButton: '.profile__edit-button', // (+)
-        addButton: '.profile__add-button' // (+)
+        profile: '.profile', 
+        name: '.profile__name', 
+        profession: '.profile__profession', 
+        editButton: '.profile__edit-button', 
+        addButton: '.profile__add-button' 
     },
     elements: '.elements',
     elementTemplate: '.element-template',

@@ -1,20 +1,20 @@
 import './index.css';
 
-import FormValidator from '../scripts/components/FormValidator.js'; // ( + )
-import Section  from '../scripts/components/Section.js'; // ( + )
-import Card from '../scripts/components/Card.js'; // ( + )
-import PopupWithImage from '../scripts/components/PopupWithImage.js'; // ( + )
-import PopupWithForm from '../scripts/components/PopupWithForm.js'; // ( + )
-import UserInfo from '../scripts/components/UserInfo.js'; // ( + )
+import FormValidator from './scripts/components/FormValidator.js';
+import Section  from './scripts/components/Section.js';
+import Card from './scripts/components/Card.js';
+import PopupWithImage from './scripts/components/PopupWithImage.js';
+import PopupWithForm from './scripts/components/PopupWithForm.js';
+import UserInfo from './scripts/components/UserInfo.js';
 
-import arrBaseCards from '../scripts/utils/cards.js'; // ( + )
-import {selectors, namesForValidation} from '../scripts/utils/constants.js'; // ( + )
+import arrBaseCards from './scripts/utils/cards.js';
+import {selectors, namesForValidation} from './scripts/utils/constants.js';
 
 const formValidators = {}
 
-const popupProfileElement = document.querySelector(selectors.blockPopup.popupProfile);
-const popupProfileName = document.querySelector(selectors.blockPopup.popupProfile).querySelector('.popup__input_type_name');
-const popupProfileProfession = document.querySelector(selectors.blockPopup.popupProfile).querySelector('.popup__input_type_job');
+const popupProfileElement = document.querySelector(selectors.blockPopup.popupProfile),
+      popupProfileName = popupProfileElement.querySelector(selectors.blockPopup.profName),
+      popupProfileProfession = popupProfileElement.querySelector(selectors.blockPopup.profJob);
 
 const popupNewCardElement = document.querySelector(selectors.blockPopup.popupNewCard);
 
@@ -22,13 +22,12 @@ const profile = document.querySelector(selectors.blockProfile.profile),
       editButton = profile.querySelector(selectors.blockProfile.editButton),
       addButton = profile.querySelector(selectors.blockProfile.addButton);
 
+// ============================================================================
+const popupFullImg = new PopupWithImage(selectors.blockPopup.popupFullImg);
 
-const popupFullImg = new PopupWithImage(selectors.blockPopup.popupFullImg); // Создание экземпляра попапа Полного изображения
+const formProfile = new PopupWithForm(handleProfileFormSubmit , selectors.blockPopup.popupProfile);
 
-const formProfile = new PopupWithForm(handleProfileFormSubmit , selectors.blockPopup.popupProfile); // Создание экземпляра попапа профиля
-
-
-const formNewCard = new PopupWithForm(handleAddCardSubmit, selectors.blockPopup.popupNewCard); // Создание экземпляра попапа новой карточки
+const formNewCard = new PopupWithForm(handleAddCardSubmit, selectors.blockPopup.popupNewCard);
 
 const addingCards = new Section({
     items: arrBaseCards,
@@ -94,9 +93,10 @@ setValidation(namesForValidation);
 
 editButton.addEventListener('click', () => {
     formProfile.open();
+    const userInfo = user.getUserInfo();
 
-    popupProfileName.value = user.getUserInfo().name;
-    popupProfileProfession.value = user.getUserInfo().profession;
+    popupProfileName.value = userInfo.name;
+    popupProfileProfession.value = userInfo.profession;
 
     formValidators[getFormName(popupProfileElement)].resetValidation();
 });
