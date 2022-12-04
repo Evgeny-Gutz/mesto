@@ -7,7 +7,6 @@ import PopupWithImage from './scripts/components/PopupWithImage.js';
 import PopupWithForm from './scripts/components/PopupWithForm.js';
 import UserInfo from './scripts/components/UserInfo.js';
 
-import arrBaseCards from './scripts/utils/cards.js';
 import {selectors, namesForValidation} from './scripts/utils/constants.js';
 
 const formValidators = {}
@@ -28,11 +27,6 @@ const popupFullImg = new PopupWithImage(selectors.blockPopup.popupFullImg);
 const formProfile = new PopupWithForm(handleProfileFormSubmit , selectors.blockPopup.popupProfile);
 
 const formNewCard = new PopupWithForm(handleAddCardSubmit, selectors.blockPopup.popupNewCard);
-
-const addingCards = new Section({
-    items: arrBaseCards,
-    renderer: createCard
-}, selectors.elements);
 
 const setValidation = (config) => {
     const formList = Array.from(document.querySelectorAll(config.formSelector))
@@ -83,8 +77,6 @@ function getFormName(popup) {
 
 // ============================================================================
 
-addingCards.renderItems();
-
 popupFullImg.setEventListeners();
 formProfile.setEventListeners();
 formNewCard.setEventListeners();
@@ -106,7 +98,7 @@ addButton.addEventListener('click', () => {
     formValidators[getFormName(popupNewCardElement)].resetValidation();
 });
 
-fetch('https://nomoreparties.co/v1/cohort-55/users/me', {
+fetch('https://nomoreparties.co/v1/cohort-55/users/me', { // 1. Загрузка информации о пользователе с сервера
   headers: {
     authorization: 'fd4b5af0-133d-42b5-9fcc-8b1d210cd42a'
   }
@@ -119,3 +111,30 @@ fetch('https://nomoreparties.co/v1/cohort-55/users/me', {
     user.setUserInfo(userDataObj);
     document.querySelector(".profile__avatar").src = result.avatar;
   }); 
+
+
+fetch('https://mesto.nomoreparties.co/v1/cohort-55/cards', { // 2. Загрузка карточек с сервера 
+    headers: {
+        authorization: 'fd4b5af0-133d-42b5-9fcc-8b1d210cd42a'
+    }
+}).
+    then(res => res.json()).
+    then((result) => {
+        const arrBaseCards = [];
+        result.forEach(element => {
+            const obj = {};
+            obj.name = element.name;
+            obj.link = element.link;
+            arrBaseCards.push(obj);
+        });
+        return arrBaseCards;
+    }).
+    then((arr) => {
+        console.log(arr);
+        const addingCards = new Section({
+            items: arr,
+            renderer: createCard
+        }, selectors.elements);
+
+        addingCards.renderItems();
+    });

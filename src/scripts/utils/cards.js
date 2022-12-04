@@ -24,25 +24,3 @@ export default [
         link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
     }
     ];
-
-// const arrBaseCards = [];
-
-// fetch('https://mesto.nomoreparties.co/v1/cohort-55/cards', {
-//     headers: {
-//         authorization: 'fd4b5af0-133d-42b5-9fcc-8b1d210cd42a'
-//     }
-// }).
-//     then(res => res.json()).
-//     then((result) => {
-//         result.forEach(element => {
-//             const obj = {};
-//             obj.name = element.name;
-//             obj.link = element.link;
-//             arrBaseCards.push(obj);
-//         });
-//         return arrBaseCards;
-//     }).
-//     then((arr) => {
-//         export {arr};
-//     });
-
