@@ -12,10 +12,6 @@ export default class UserInfo {
     }
 
     setUserInfo(newDataPerson) {
-        // console.log(newDataPerson);
-        // console.log(this._nameElement);
-        // console.log(selectorNamePerson);
-
         this._nameElement.textContent = newDataPerson['name'];
         this._professionElement.textContent = newDataPerson['profession'];
     }

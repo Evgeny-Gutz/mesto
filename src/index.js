@@ -105,3 +105,17 @@ addButton.addEventListener('click', () => {
     formNewCard.open();
     formValidators[getFormName(popupNewCardElement)].resetValidation();
 });
+
+fetch('https://nomoreparties.co/v1/cohort-55/users/me', {
+  headers: {
+    authorization: 'fd4b5af0-133d-42b5-9fcc-8b1d210cd42a'
+  }
+})
+  .then(res => res.json())
+  .then((result) => {
+    const userDataObj = {};
+    userDataObj.name = result.name;
+    userDataObj.profession = result.about;
+    user.setUserInfo(userDataObj);
+    document.querySelector(".profile__avatar").src = result.avatar;
+  }); 
