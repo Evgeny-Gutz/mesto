@@ -6,6 +6,7 @@ import Card from './scripts/components/Card.js';
 import PopupWithImage from './scripts/components/PopupWithImage.js';
 import PopupWithForm from './scripts/components/PopupWithForm.js';
 import UserInfo from './scripts/components/UserInfo.js';
+import Api from './scripts/components/Api.js';
 
 import {selectors, namesForValidation} from './scripts/utils/constants.js';
 
@@ -23,10 +24,37 @@ const profile = document.querySelector(selectors.blockProfile.profile),
 
 // ============================================================================
 const popupFullImg = new PopupWithImage(selectors.blockPopup.popupFullImg);
-
 const formProfile = new PopupWithForm(handleProfileFormSubmit , selectors.blockPopup.popupProfile);
-
 const formNewCard = new PopupWithForm(handleAddCardSubmit, selectors.blockPopup.popupNewCard);
+
+const apiOptions = {
+    url: 'https://nomoreparties.co/v1/cohort-55',
+    headers: {
+        authorization: 'fd4b5af0-133d-42b5-9fcc-8b1d210cd42a',
+        'Content-Type': 'application/json'
+      }
+};  
+const api = new Api(apiOptions);
+
+api.getInitialCards()
+    .then(res => {
+        console.log(res);
+    })
+    .catch(err => {
+        console.log(err);
+    })
+
+const userApi = api.getDataUser();
+userApi
+    .then((result) => {
+        const userDataObj = {};
+        userDataObj.name = result.name;
+        userDataObj.profession = result.about;
+        user.setUserInfo(userDataObj);
+        document.querySelector(".profile__avatar").src = result.avatar;
+    });
+
+
 
 const setValidation = (config) => {
     const formList = Array.from(document.querySelectorAll(config.formSelector))
@@ -77,6 +105,8 @@ function getFormName(popup) {
 
 // ============================================================================
 
+
+
 popupFullImg.setEventListeners();
 formProfile.setEventListeners();
 formNewCard.setEventListeners();
@@ -98,43 +128,4 @@ addButton.addEventListener('click', () => {
     formValidators[getFormName(popupNewCardElement)].resetValidation();
 });
 
-fetch('https://nomoreparties.co/v1/cohort-55/users/me', { // 1. Загрузка информации о пользователе с сервера
-  headers: {
-    authorization: 'fd4b5af0-133d-42b5-9fcc-8b1d210cd42a'
-  }
-})
-  .then(res => res.json())
-  .then((result) => {
-    const userDataObj = {};
-    userDataObj.name = result.name;
-    userDataObj.profession = result.about;
-    user.setUserInfo(userDataObj);
-    document.querySelector(".profile__avatar").src = result.avatar;
-  }); 
-
-
-fetch('https://mesto.nomoreparties.co/v1/cohort-55/cards', { // 2. Загрузка карточек с сервера 
-    headers: {
-        authorization: 'fd4b5af0-133d-42b5-9fcc-8b1d210cd42a'
-    }
-}).
-    then(res => res.json()).
-    then((result) => {
-        const arrBaseCards = [];
-        result.forEach(element => {
-            const obj = {};
-            obj.name = element.name;
-            obj.link = element.link;
-            arrBaseCards.push(obj);
-        });
-        return arrBaseCards;
-    }).
-    then((arr) => {
-        console.log(arr);
-        const addingCards = new Section({
-            items: arr,
-            renderer: createCard
-        }, selectors.elements);
-
-        addingCards.renderItems();
-    });
+ 
