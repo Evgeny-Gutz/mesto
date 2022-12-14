@@ -8,8 +8,9 @@ export  const selectors = {
     },
     blockProfile: {
         profile: '.profile', 
-        name: '.profile__name', 
-        profession: '.profile__profession', 
+        name: '.profile__name',
+        profession: '.profile__profession',
+        avatar: '.profile__avatar',
         editButton: '.profile__edit-button', 
         addButton: '.profile__add-button' 
     },
