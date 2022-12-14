@@ -1,7 +1,8 @@
 export default class Card {
-    constructor({name, link}, handleCardClick, templateSelector) {
+    constructor({name, link, counter = 0}, handleCardClick, templateSelector) {
         this._name = name;
         this._link = link;
+        this._counter = counter;
         this._templateSelector = templateSelector;
         this._handleCardClick = handleCardClick;
     }
@@ -12,11 +13,13 @@ export default class Card {
         this._textCard = this._elementCard.querySelector('.element__text');
         this._likeCard = this._elementCard.querySelector('.element__like');
         this._deleteIconCard = this._elementCard.querySelector('.element__delete-icon');
+        this._likeCounter = this._elementCard.querySelector('.element__like-counter');
         this._setEventLiteners();
 
         this._imgCard.src = this._link;
         this._imgCard.alt = this._name;
         this._textCard.textContent = this._name;
+        this._likeCounter.textContent = this._counter;
 
         return this._elementCard;
     }

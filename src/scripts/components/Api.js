@@ -4,45 +4,54 @@ export default class Api {
         this._headers = headers;
     }
 
-    getInitialCards() {
-        return fetch(`${this._url}/cards`, {
+    getDataUser() {
+        return fetch(this._setUrl('users/me'),{
             headers: this._headers
         })
         .then(res => {
-            return (res.ok) ? res.json(): Promise.reject(`Ошибка: ${res.status}`);
-        })
-        // .then(res => {
-        //     const baseCards = [];
-        //     res.forEach((elem => {
-        //         let obj = {};
-        //         obj.name = elem.name;
-        //         obj.link = elem.link;
-        //         baseCards.push(obj);
-        //     }))
-        //     return baseCards;
-        // })
-        
-    }
-
-    getDataUser() {
-        return fetch(this._baseUrl + '/users/me', this._options)
-        .then(res => {
-            if(res.ok) return res.json();
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-        .catch(err => {
-            console.log(err);
+            return this._returnResult(res);
         })
     }
 
-    saveDataUser() {
-        return fetch(this._baseUrl + '/users/me', this._options)
+    getInitialCards() {
+        return fetch(this._setUrl('cards'), {
+            headers: this._headers
+        })
         .then(res => {
-            if(res.ok) return res.json();
-            return Promise.reject(`Ошибка: ${res.status}`);
+            return this._returnResult(res);
         })
-        .catch(err => {
-            console.log(err);
+    }
+
+    addNewCard({name, link}) {
+        return fetch(this._setUrl('cards'),{
+            method: 'POST',
+            headers: this._headers,
+            body: JSON.stringify({name, link})
         })
+        .then(res => {
+            return this._returnResult(res);
+        })
+    }
+
+    changeDataProfil({name, about}) {
+        return fetch(this._setUrl('users/me'),{
+            method: 'PATCH',
+            headers: this._headers,
+            body: JSON.stringify({
+                name: name,
+                about: about
+            })
+        })
+        .then(res => {
+            return this._returnResult(res);
+        })
+    }
+
+    _setUrl(urlEnding) {
+        return `${this._url}${urlEnding}`;
+    }
+
+    _returnResult(res) {
+        return (res.ok) ? res.json(): Promise.reject(`Ошибка: ${res.status}`);
     }
 }
