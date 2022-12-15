@@ -4,6 +4,7 @@ import Section  from './scripts/components/Section.js';
 import Card from './scripts/components/Card.js';
 import PopupWithImage from './scripts/components/PopupWithImage.js';
 import PopupWithForm from './scripts/components/PopupWithForm.js';
+import PopupWithCardDelete from './scripts/components/PopupWithCardDelete.js';
 import UserInfo from './scripts/components/UserInfo.js';
 import Api from './scripts/components/Api.js';
 import {selectors, namesForValidation} from './scripts/utils/constants.js';
@@ -18,6 +19,8 @@ const profile = document.querySelector(selectors.blockProfile.profile),
       profileAvatar = document.querySelector(selectors.blockProfile.avatar),
       editButton = profile.querySelector(selectors.blockProfile.editButton),
       addButton = profile.querySelector(selectors.blockProfile.addButton);
+
+const confirmDeleteButton = document.querySelector('.popup__button');
 
 const formValidators = {};
 const apiOptions = {
@@ -35,6 +38,7 @@ const dataUser = {
 const popupFullImg = new PopupWithImage(selectors.blockPopup.popupFullImg);
 const formProfile = new PopupWithForm(handleProfileFormSubmit , selectors.blockPopup.popupProfile);
 const formNewCard = new PopupWithForm(handleAddCardSubmit, selectors.blockPopup.popupNewCard);
+const popupDeletCard = new PopupWithCardDelete('.card-delete');
 const addingCards = new Section(createCard, selectors.elements);
 const user = new UserInfo(dataUser);
 const api = new Api(apiOptions);
@@ -79,7 +83,7 @@ function handleProfileFormSubmit(evt, obj) {
 }
 
 function createCard(obj) {
-    const newCard = new Card(obj, () => {popupFullImg.open(obj)}, selectors.elementTemplate);
+    const newCard = new Card(obj, () => {popupFullImg.open(obj)}, setDeletCard, selectors.elementTemplate);
     const cardElement = newCard.generateCard();
     return cardElement;
 }
@@ -88,8 +92,18 @@ function getFormName(popup) {
     return popup.querySelector(selectors.form).getAttribute('name');
 }
 
-// ============================================================================
+function setDeletCard(elem) {
+    popupDeletCard.open()
+    const card = elem.closest('.element');
+    
+    confirmDeleteButton.addEventListener('click', () => {
+        card.remove();
+        popupDeletCard.close();
+    });
+}
 
+// ============================================================================
+popupDeletCard.setEventListeners();
 popupFullImg.setEventListeners();
 formProfile.setEventListeners();
 formNewCard.setEventListeners();

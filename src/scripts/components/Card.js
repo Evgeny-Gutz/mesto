@@ -1,10 +1,11 @@
 export default class Card {
-    constructor({name, link, counter = 0}, handleCardClick, templateSelector) {
+    constructor({name, link, counter = 0}, handleCardClick, handleDeleteClick, templateSelector) {
         this._name = name;
         this._link = link;
         this._counter = counter;
         this._templateSelector = templateSelector;
         this._handleCardClick = handleCardClick;
+        this._handleDeleteClick = handleDeleteClick;
     }
 
     generateCard() {
@@ -37,16 +38,12 @@ export default class Card {
     _setEventLiteners() {
         this._imgCard.addEventListener('click', () =>  this._handleCardClick());
 
-        this._likeCard.addEventListener('click', () => { this._handleLikeClick();});
+        this._likeCard.addEventListener('click', () => this._handleLikeClick());
 
-        this._deleteIconCard.addEventListener('click', () => { this._handleDeleteClick();});
+        this._deleteIconCard.addEventListener('click', (evt) => this._handleDeleteClick(evt.target));
     }
 
     _handleLikeClick() {
         this._likeCard.classList.toggle('element__like_active');
-    }
-
-    _handleDeleteClick() {
-        this._elementCard.remove();
     }
 }
