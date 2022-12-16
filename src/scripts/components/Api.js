@@ -47,6 +47,16 @@ export default class Api {
         })
     }
 
+    deleteCard(id) {
+        return fetch(this._setUrl(`cards/${id}`),{
+            method: 'DELETE',
+            headers: this._headers
+        })
+        .then(res => {
+            return this._returnResult(res);
+        })
+    }
+
     _setUrl(urlEnding) {
         return `${this._url}${urlEnding}`;
     }

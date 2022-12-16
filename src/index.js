@@ -4,7 +4,6 @@ import Section  from './scripts/components/Section.js';
 import Card from './scripts/components/Card.js';
 import PopupWithImage from './scripts/components/PopupWithImage.js';
 import PopupWithForm from './scripts/components/PopupWithForm.js';
-import PopupWithCardDelete from './scripts/components/PopupWithCardDelete.js';
 import UserInfo from './scripts/components/UserInfo.js';
 import Api from './scripts/components/Api.js';
 import {selectors, namesForValidation} from './scripts/utils/constants.js';
@@ -20,8 +19,6 @@ const profile = document.querySelector(selectors.blockProfile.profile),
       editButton = profile.querySelector(selectors.blockProfile.editButton),
       addButton = profile.querySelector(selectors.blockProfile.addButton);
 
-const confirmDeleteButton = document.querySelector('.popup__button');
-
 const formValidators = {};
 const apiOptions = {
     url: 'https://nomoreparties.co/v1/cohort-55/',
@@ -36,9 +33,9 @@ const dataUser = {
 };
 
 const popupFullImg = new PopupWithImage(selectors.blockPopup.popupFullImg);
-const formProfile = new PopupWithForm(handleProfileFormSubmit , selectors.blockPopup.popupProfile);
-const formNewCard = new PopupWithForm(handleAddCardSubmit, selectors.blockPopup.popupNewCard);
-const popupDeletCard = new PopupWithCardDelete('.card-delete');
+const formProfile = new PopupWithForm(selectors.blockPopup.popupProfile, handleProfileFormSubmit);
+const formNewCard = new PopupWithForm(selectors.blockPopup.popupNewCard, handleAddCardSubmit);
+const popupDeletCard = new PopupWithForm('.card-delete');
 const addingCards = new Section(createCard, selectors.elements);
 const user = new UserInfo(dataUser);
 const api = new Api(apiOptions);
@@ -54,9 +51,7 @@ const setValidation = (config) => {
     });
 };
 
-function handleAddCardSubmit(evt, obj) {
-    evt.preventDefault();
-    
+function handleAddCardSubmit(obj) {
     const objTitleLinkNew = {
         name: obj['title'],
         link: obj['link']
@@ -69,9 +64,7 @@ function handleAddCardSubmit(evt, obj) {
     formNewCard.close();
 }
 
-function handleProfileFormSubmit(evt, obj) {
-    evt.preventDefault();
-
+function handleProfileFormSubmit(obj) {
     api.changeDataProfil({name:obj.name, about:obj.profession})
         .then( (res => {
             const obj = {};
@@ -83,7 +76,20 @@ function handleProfileFormSubmit(evt, obj) {
 }
 
 function createCard(obj) {
-    const newCard = new Card(obj, () => {popupFullImg.open(obj)}, setDeletCard, selectors.elementTemplate);
+    const newCard = new Card(
+        obj, 
+        () => {popupFullImg.open(obj)}, 
+        (id) => {
+            popupDeletCard.open();
+            popupDeletCard.setNewHandleClickSubmit(() => {
+                api.deleteCard(id)
+                    .then(res => {
+                        newCard.removeCard();
+                        popupDeletCard.close();
+                    })
+            })
+        },
+        selectors.elementTemplate);
     const cardElement = newCard.generateCard();
     return cardElement;
 }
@@ -92,17 +98,7 @@ function getFormName(popup) {
     return popup.querySelector(selectors.form).getAttribute('name');
 }
 
-function setDeletCard(elem) {
-    popupDeletCard.open()
-    const card = elem.closest('.element');
-    
-    confirmDeleteButton.addEventListener('click', () => {
-        card.remove();
-        popupDeletCard.close();
-    });
-}
 
-// ============================================================================
 popupDeletCard.setEventListeners();
 popupFullImg.setEventListeners();
 formProfile.setEventListeners();
@@ -125,30 +121,34 @@ addButton.addEventListener('click', () => {
     formValidators[getFormName(popupNewCardElement)].resetValidation();
 });
 
-api.getInitialCards()
-    .then(res => {
-        const arr = [];
-        res.forEach(elem => {
-            console.log()
-            arr.push({
-                name: elem.name,
-                link: elem.link,
-                counter: elem.likes.length
-            })
-        })
-        addingCards.renderItems(arr);
+let userId;    
+api.getDataUser()
+    .then(dataProfile => {
+        user.setUserInfo({
+            name: dataProfile.name,
+            profession: dataProfile.about
+        });
+        profileAvatar.src = dataProfile.avatar;
+        userId = dataProfile._id;
     })
     .catch(err => {
         console.log(err);
     })
 
-api.getDataUser()
-    .then(res => {
-        user.setUserInfo({
-            name: res.name,
-            profession: res.about
-        });
-        profileAvatar.src = res.avatar;
+api.getInitialCards()
+    .then(cardsList => {
+        const arr = [];
+        cardsList.forEach(elem => {
+            arr.push({
+                name: elem.name,
+                link: elem.link,
+                counter: elem.likes.length,
+                id: elem._id,
+                userId: userId,
+                ownerId: elem.owner._id
+            })
+        })
+        addingCards.renderItems(arr);
     })
     .catch(err => {
         console.log(err);
