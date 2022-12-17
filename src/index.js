@@ -15,7 +15,8 @@ const popupProfileElement = document.querySelector(selectors.blockPopup.popupPro
 const popupNewCardElement = document.querySelector(selectors.blockPopup.popupNewCard);
 
 const profile = document.querySelector(selectors.blockProfile.profile),
-      profileAvatar = document.querySelector(selectors.blockProfile.avatar),
+      profileAvatar = profile.querySelector(selectors.blockProfile.avatar),
+      pencilAvatar = profile.querySelector('.profile__change-avatar'),
       editButton = profile.querySelector(selectors.blockProfile.editButton),
       addButton = profile.querySelector(selectors.blockProfile.addButton);
 
@@ -36,6 +37,7 @@ const popupFullImg = new PopupWithImage(selectors.blockPopup.popupFullImg);
 const formProfile = new PopupWithForm(selectors.blockPopup.popupProfile, handleProfileFormSubmit);
 const formNewCard = new PopupWithForm(selectors.blockPopup.popupNewCard, handleAddCardSubmit);
 const popupDeletCard = new PopupWithForm('.card-delete');
+const popupAvatar = new PopupWithForm('.avatar-popup', handleChengeAvatar);
 const addingCards = new Section(createCard, selectors.elements);
 const user = new UserInfo(dataUser);
 const api = new Api(apiOptions);
@@ -50,6 +52,14 @@ const setValidation = (config) => {
         validator.enableValidation();
     });
 };
+
+function handleChengeAvatar(src) {
+    api.changeAvatarProfil(src.link)
+        .then(res => {
+            profileAvatar.src = res.avatar;
+            popupAvatar.close();
+        })
+}
 
 function handleAddCardSubmit(obj) {
     const objTitleLinkNew = {
@@ -116,8 +126,12 @@ popupDeletCard.setEventListeners();
 popupFullImg.setEventListeners();
 formProfile.setEventListeners();
 formNewCard.setEventListeners();
-
+popupAvatar.setEventListeners();
 setValidation(namesForValidation);
+
+pencilAvatar.addEventListener('click', () => {
+    popupAvatar.open();
+})
 
 editButton.addEventListener('click', () => {
     formProfile.open();

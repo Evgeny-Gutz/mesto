@@ -47,6 +47,19 @@ export default class Api {
         })
     }
 
+    changeAvatarProfil(avatar) {
+        return fetch(this._setUrl('users/me/avatar'),{
+            method: 'PATCH',
+            headers: this._headers,
+            body: JSON.stringify({
+                avatar: avatar
+            })
+        })
+        .then(res => {
+            return this._returnResult(res);
+        })
+    }
+
     deleteCard(id) {
         return fetch(this._setUrl(`cards/${id}`),{
             method: 'DELETE',
