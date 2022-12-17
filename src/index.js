@@ -14,6 +14,8 @@ const popupProfileElement = document.querySelector(selectors.blockPopup.popupPro
 
 const popupNewCardElement = document.querySelector(selectors.blockPopup.popupNewCard);
 
+const popupChangeAvatar = document.querySelector('.avatar-popup');
+
 const profile = document.querySelector(selectors.blockProfile.profile),
       profileAvatar = profile.querySelector(selectors.blockProfile.avatar),
       pencilAvatar = profile.querySelector('.profile__change-avatar'),
@@ -134,6 +136,7 @@ setValidation(namesForValidation);
 
 pencilAvatar.addEventListener('click', () => {
     popupAvatar.open();
+    formValidators[getFormName(popupChangeAvatar)].resetValidation();
 })
 
 editButton.addEventListener('click', () => {
