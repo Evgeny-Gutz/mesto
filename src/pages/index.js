@@ -1,12 +1,12 @@
 import './index.css';
-import FormValidator from './scripts/components/FormValidator.js';
-import Section  from './scripts/components/Section.js';
-import Card from './scripts/components/Card.js';
-import PopupWithImage from './scripts/components/PopupWithImage.js';
-import PopupWithForm from './scripts/components/PopupWithForm.js';
-import UserInfo from './scripts/components/UserInfo.js';
-import Api from './scripts/components/Api.js';
-import {selectors, namesForValidation} from './scripts/utils/constants.js';
+import FormValidator from '../scripts/components/FormValidator.js';
+import Section  from '../scripts/components/Section.js';
+import Card from '../scripts/components/Card.js';
+import PopupWithImage from '../scripts/components/PopupWithImage.js';
+import PopupWithForm from '../scripts/components/PopupWithForm.js';
+import UserInfo from '../scripts/components/UserInfo.js';
+import Api from '../scripts/components/Api.js';
+import {selectors, namesForValidation} from '../scripts/utils/constants.js';
 
 const popupProfileElement = document.querySelector(selectors.blockPopup.popupProfile),
       popupProfileName = popupProfileElement.querySelector(selectors.blockPopup.profName),
@@ -32,7 +32,8 @@ const apiOptions = {
 };
 const dataUser = {
     selectorNamePerson: selectors.blockProfile.name,
-    selectorAboutPerson: selectors.blockProfile.profession
+    selectorAboutPerson: selectors.blockProfile.profession,
+    selectorAvatar: selectors.blockProfile.avatar
 };
 
 const popupFullImg = new PopupWithImage(selectors.blockPopup.popupFullImg);
@@ -70,8 +71,17 @@ function handleAddCardSubmit(obj) {
         link: obj['link']
     };
     api.addNewCard(objTitleLinkNew)
-        .then( (response) => {
-            addingCards.addItem(createCard(response));
+        .then( (res) => {
+            const card = createCard({
+                name: res.name,
+                link: res.link,
+                counter: res.likes.length,
+                id: res._id,
+                userId: userId,
+                ownerId: res.owner._id,
+                likes: res.likes
+            });
+            addingCards.prependItem(card);
             formNewCard.close();
             formNewCard.changeSubmitValue('Создать');
         })
@@ -159,7 +169,9 @@ api.getDataUser()
     .then(dataProfile => {
         user.setUserInfo({
             name: dataProfile.name,
-            profession: dataProfile.about
+            profession: dataProfile.about,
+            avatar: dataProfile.avatar,
+            userId: dataProfile._id
         });
         profileAvatar.src = dataProfile.avatar;
         userId = dataProfile._id;

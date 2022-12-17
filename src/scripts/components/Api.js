@@ -5,96 +5,73 @@ export default class Api {
     }
 
     getDataUser() {
-        return fetch(this._setUrl('users/me'),{
+        return this._request('users/me', {
             headers: this._headers
-        })
-        .then(res => {
-            return this._returnResult(res);
-        })
+        });
     }
 
     getInitialCards() {
-        return fetch(this._setUrl('cards'), {
+        return this._request('cards', {
             headers: this._headers
-        })
-        .then(res => {
-            return this._returnResult(res);
-        })
+        });
     }
 
     addNewCard({name, link}) {
-        return fetch(this._setUrl('cards'),{
-            method: 'POST',
-            headers: this._headers,
-            body: JSON.stringify({name, link})
-        })
-        .then(res => {
-            return this._returnResult(res);
-        })
+        return this._request('cards', {
+                method: 'POST',
+                headers: this._headers,
+                body: JSON.stringify({name, link})
+            });
     }
 
     changeDataProfil({name, about}) {
-        return fetch(this._setUrl('users/me'),{
+        return this._request('users/me', {
             method: 'PATCH',
             headers: this._headers,
             body: JSON.stringify({
                 name: name,
                 about: about
             })
-        })
-        .then(res => {
-            return this._returnResult(res);
-        })
+        });
     }
 
     changeAvatarProfil(avatar) {
-        return fetch(this._setUrl('users/me/avatar'),{
+        return this._request('users/me/avatar', {
             method: 'PATCH',
             headers: this._headers,
             body: JSON.stringify({
                 avatar: avatar
             })
-        })
-        .then(res => {
-            return this._returnResult(res);
-        })
+        });
     }
 
     deleteCard(id) {
-        return fetch(this._setUrl(`cards/${id}`),{
+        return this._request(`cards/${id}`, {
             method: 'DELETE',
             headers: this._headers
-        })
-        .then(res => {
-            return this._returnResult(res);
-        })
+        });
     }
 
     setLike(id) {
-        return fetch(this._setUrl(`cards/${id}/likes`),{
+        return this._request(`cards/${id}/likes`, {
             method: 'PUT',
             headers: this._headers
-        })
-        .then(res => {
-            return this._returnResult(res);
-        })
+        });
     }
 
     deleteLike(id) {
-        return fetch(this._setUrl(`cards/${id}/likes`),{
+        return this._request(`cards/${id}/likes`, {
             method: 'DELETE',
             headers: this._headers
-        })
-        .then(res => {
-            return this._returnResult(res);
-        })
-    }
-
-    _setUrl(urlEnding) {
-        return `${this._url}${urlEnding}`;
+        });
     }
 
     _returnResult(res) {
         return (res.ok) ? res.json(): Promise.reject(`Ошибка: ${res.status}`);
     }
+
+    _request(url, options) {
+        return fetch(`${this._url}${url}`, options).then(this._returnResult)
+    }
+
 }
