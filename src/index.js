@@ -89,6 +89,19 @@ function createCard(obj) {
                     })
             })
         },
+        (id) => {
+            if(newCard.checkingMyLike()) {
+                api.deleteLike(id)
+                .then(res => {
+                    newCard.changeLike(res.likes);
+                })
+            } else {
+                api.setLike(id)
+                .then(res => {
+                    newCard.changeLike(res.likes);
+                })
+            }
+        },
         selectors.elementTemplate);
     const cardElement = newCard.generateCard();
     return cardElement;
@@ -145,7 +158,8 @@ api.getInitialCards()
                 counter: elem.likes.length,
                 id: elem._id,
                 userId: userId,
-                ownerId: elem.owner._id
+                ownerId: elem.owner._id,
+                likes: elem.likes
             })
         })
         addingCards.renderItems(arr);

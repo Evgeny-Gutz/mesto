@@ -57,6 +57,26 @@ export default class Api {
         })
     }
 
+    setLike(id) {
+        return fetch(this._setUrl(`cards/${id}/likes`),{
+            method: 'PUT',
+            headers: this._headers
+        })
+        .then(res => {
+            return this._returnResult(res);
+        })
+    }
+
+    deleteLike(id) {
+        return fetch(this._setUrl(`cards/${id}/likes`),{
+            method: 'DELETE',
+            headers: this._headers
+        })
+        .then(res => {
+            return this._returnResult(res);
+        })
+    }
+
     _setUrl(urlEnding) {
         return `${this._url}${urlEnding}`;
     }
