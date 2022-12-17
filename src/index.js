@@ -58,6 +58,7 @@ function handleChengeAvatar(src) {
         .then(res => {
             profileAvatar.src = res.avatar;
             popupAvatar.close();
+            popupAvatar.changeSubmitValue('Сохранить');
         })
 }
 
@@ -68,10 +69,10 @@ function handleAddCardSubmit(obj) {
     };
     api.addNewCard(objTitleLinkNew)
         .then( (response) => {
-            addingCards.addItem(createCard({name: response.name, link: response.link}));
+            addingCards.addItem(createCard(response));
+            formNewCard.close();
+            formNewCard.changeSubmitValue('Создать');
         })
-    
-    formNewCard.close();
 }
 
 function handleProfileFormSubmit(obj) {
@@ -82,6 +83,7 @@ function handleProfileFormSubmit(obj) {
             obj.profession = res.about;
             user.setUserInfo(obj);
             formProfile.close();
+            formProfile.changeSubmitValue('Сохранить');
         }))
 }
 
@@ -96,6 +98,7 @@ function createCard(obj) {
                     .then(res => {
                         newCard.removeCard();
                         popupDeletCard.close();
+                        popupDeletCard.changeSubmitValue('Да');
                     })
             })
         },
