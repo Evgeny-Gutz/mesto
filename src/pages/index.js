@@ -59,8 +59,13 @@ const setValidation = (config) => {
 function handleChengeAvatar(src) {
     api.changeAvatarProfil(src.link)
         .then(res => {
-            profileAvatar.src = res.avatar;
+            user.setUserInfo(res);
             popupAvatar.close();
+        })
+        .catch(res => {
+            console.log(`Произошла ошибка:${res} при смене изображения аватара`);
+        })
+        .finally(() => {
             popupAvatar.changeSubmitValue('Сохранить');
         })
 }
@@ -77,12 +82,17 @@ function handleAddCardSubmit(obj) {
                 link: res.link,
                 counter: res.likes.length,
                 id: res._id,
-                userId: userId,
+                userId: user.getUserId(),
                 ownerId: res.owner._id,
                 likes: res.likes
             });
             addingCards.prependItem(card);
             formNewCard.close();
+        })
+        .catch(res => {
+            console.log(`Произошла ошибка: ${res} при попытке добавления новой карточки`);
+        })
+        .finally(() => {
             formNewCard.changeSubmitValue('Создать');
         })
 }
@@ -90,13 +100,15 @@ function handleAddCardSubmit(obj) {
 function handleProfileFormSubmit(obj) {
     api.changeDataProfil({name:obj.name, about:obj.profession})
         .then( (res => {
-            const obj = {};
-            obj.name = res.name;
-            obj.profession = res.about;
-            user.setUserInfo(obj);
+            user.setUserInfo(res);
             formProfile.close();
-            formProfile.changeSubmitValue('Сохранить');
         }))
+        .catch(res => {
+            console.log(`Произошла ошибка: ${res} при отправе сабмита формы изменения данных пользователя`);
+        })
+        .finally(() => {
+            formProfile.changeSubmitValue('Сохранить');
+        })
 }
 
 function createCard(obj) {
@@ -112,6 +124,9 @@ function createCard(obj) {
                         popupDeletCard.close();
                         popupDeletCard.changeSubmitValue('Да');
                     })
+                    .catch(res => {
+                        console.log(`Произошла ошибка: ${res} при попытке удаления карточки`);
+                    })
             })
         },
         (id) => {
@@ -120,10 +135,16 @@ function createCard(obj) {
                 .then(res => {
                     newCard.changeLike(res.likes);
                 })
+                .catch(res => {
+                    console.log(`Произошла ошибка: ${res} при попытке удаления лайка`);
+                })
             } else {
                 api.setLike(id)
                 .then(res => {
                     newCard.changeLike(res.likes);
+                })
+                .catch(res => {
+                    console.log(`Произошла ошибка: ${res} при попытке установить лайк`);
                 })
             }
         },
@@ -136,6 +157,37 @@ function getFormName(popup) {
     return popup.querySelector(selectors.form).getAttribute('name');
 }
 
+function getDataUser() {
+    return api.getDataUser()
+    .then(dataProfile => {
+        user.setUserInfo(dataProfile);
+        return user;
+    })
+    .catch(err => {
+        console.log(err);
+    })
+}
+
+function getCards() {
+    return api.getInitialCards()
+    .then(cardsList => {
+        const arr = [];
+        cardsList.forEach(elem => {
+            arr.push({
+                name: elem.name,
+                link: elem.link,
+                counter: elem.likes.length,
+                id: elem._id,
+                ownerId: elem.owner._id,
+                likes: elem.likes
+            })
+        })
+        return arr;
+    })
+    .catch(err => {
+        console.log(err);
+    })
+}
 
 popupDeletCard.setEventListeners();
 popupFullImg.setEventListeners();
@@ -162,39 +214,14 @@ editButton.addEventListener('click', () => {
 addButton.addEventListener('click', () => {
     formNewCard.open();
     formValidators[getFormName(popupNewCardElement)].resetValidation();
-});
+});    
 
-let userId;    
-api.getDataUser()
-    .then(dataProfile => {
-        user.setUserInfo({
-            name: dataProfile.name,
-            profession: dataProfile.about,
-            avatar: dataProfile.avatar,
-            userId: dataProfile._id
-        });
-        profileAvatar.src = dataProfile.avatar;
-        userId = dataProfile._id;
-    })
-    .catch(err => {
-        console.log(err);
-    })
-
-api.getInitialCards()
-    .then(cardsList => {
-        const arr = [];
-        cardsList.forEach(elem => {
-            arr.push({
-                name: elem.name,
-                link: elem.link,
-                counter: elem.likes.length,
-                id: elem._id,
-                userId: userId,
-                ownerId: elem.owner._id,
-                likes: elem.likes
-            })
+Promise.all([getDataUser(), getCards()])
+    .then( ([user, cards]) => {
+        cards.forEach( elem => {
+            elem.userId = user.getUserId();
         })
-        addingCards.renderItems(arr);
+        addingCards.renderItems(cards);
     })
     .catch(err => {
         console.log(err);

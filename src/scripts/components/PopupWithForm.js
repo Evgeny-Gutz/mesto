@@ -27,8 +27,8 @@ export default class PopupWithForm extends Popup {
         this._form.reset();
     }
 
-    setNewHandleClickSubmit(newhandleClickSubmit) {
-        this._handleClickSubmit = newhandleClickSubmit;
+    setNewHandleClickSubmit(newHandleClickSubmit) {
+        this._handleClickSubmit = newHandleClickSubmit;
     }
 
     _getInputValues() {
